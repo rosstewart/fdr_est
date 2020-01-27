@@ -1,2 +1,8 @@
 
 *~
+test_search/pride
+test_search/fragger_results
+test_search/est_results
+test_search/D.melanogaster_3mix_twomix.csv test_search/D.melanogaster_twomix.csv test_search/E.coli_2mix_twomix.csv test_search/E.coli_3mix_twomix.csv test_search/H.sapiens2_twomix.csv test_search/H.sapiens3_twomix.csv test_search/M.musculus2_3mix.csv test_search/M.musculus3_3mix.csv test_search/M.musculus3_3s4c.csv test_search/S.cerevisiae2_2mix.csv test_search/S.cerevisiae2_3mix.csv test_search/S.cerevisiae2_3s4c.csv test_search/S.cerevisiae3_2mix.csv test_search/S.cerevisiae3_3mix.csv test_search/S.cerevisiae3_3s4c.csv test_search/S.cerevisiae_twomix.csv
+test_search/dist.png test_search/mouse.png test_search/pep_match_curve.png test_search/pep_venn_diagram.png test_search/psm_venn_diagram.png test_search/spec_match_curve.png
+test_search/Adult_Adrenalgland_Gel_Elite_49_f01_d.tsv test_search/Adult_Adrenalgland_Gel_Elite_49_f01_nod.tsv test_search/isb02_t1.tsv test_search/isb02_t3.tsv test_search/isb02_t3_nodecoy.tsv
