@@ -138,8 +138,4 @@ n = size(dh,1);
 s = dh(1:n-1) .* ds + 1/2 * ds .* ddh;
 sdcdf = sum(abs(s));
 
-sddir = [species_folder, '/sdcdf/'];
-if ~exist(sddir)
-    mkdir(sddir)
-end
 save([sddir, num2str(bootstrap_num), '.mat'], 'sdcdf');
