@@ -1,4 +1,4 @@
-function [alpha, beta, u_c, sigma_c, lambda_c, u_i1, sigma_i1, lambda_i1, u_i2, sigma_i2, lambda_i2] = EM3(S,sl1,sl2)
+function [alpha, beta, u_c, sigma_c, lambda_c, u_i1, sigma_i1, lambda_i1, u_i2, sigma_i2, lambda_i2] = EM3(S,sl1,sl2,sl3)
 %EM The EM algorithm to estimate parameters
 %   f1 = alpha*fc + (1-alpha)*fi1
 %   f2 = alpha*fi1 + beta*fc + (1-alpha-beta)*fi2
@@ -37,7 +37,8 @@ beta = nc2 / M2;
 % [u_i2, sigma_i2, lambda_i2] = sn_para_est(reshape(S2_sorted(int32(M*alpha):M), 1, []));
 [u_i2, sigma_i2, lambda_i2] = sn_para_est(S2_sorted(int32(M2*alpha):M2));
 lambda_c = (lambda_c) * sl1;
-lambda_i2 = (lambda_i2) * sl2;
+lambda_i1 = (lambda_i1) * sl2;
+lambda_i2 = (lambda_i2) * sl3;
 % sigma_c = sigma_i2;
 % u_i1 = u_i2;
 % sigma_i1 = sigma_i2;
