@@ -1,8 +1,9 @@
 % clear
 % species = 'S.cerevisiae3'
-nboots = 200;
+bootstart = 1;
+nboots = 50;
 boot_ratio = .1;
-for bootstrap_num = 1:nboots
+for bootstrap_num = bootstart:bootstart+nboots-1
     loaddata
     n = size(mat,1);
     boot_n = round(n * boot_ratio);
