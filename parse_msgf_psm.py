@@ -83,11 +83,12 @@ elif data_source == 'NIST':
             'drosophila',
             'e_coli',
             'human',
-            'mouse'
+            'mouse',
+            'yeast',
         ]
     result_dir = 'test_search/est_results_nist/'
     data_source = 'NIST'
-    psm_dir = 'nist/'
+    psm_dir = 'test_search/nist/'
     data_dir = 'test_search/matdata_nist/'
 
 #%%
@@ -246,6 +247,6 @@ def extract_rep_mat(species):
 #%%
 for species in species_list:
     print(species)
-#    extract_mat(species)
+    extract_mat(species)
     extract_rep_mat(species)
 
