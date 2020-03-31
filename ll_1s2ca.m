@@ -1,7 +1,7 @@
 
 method = '_1s2ca';
 
-load(['test_search/est_results/',species,'/params/',method,'.mat'])
+load([results_dir,species,'/params/',method,'.mat'])
 
 alpha = theta.alpha;
 u_c = theta.theta_c.u;

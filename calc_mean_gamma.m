@@ -1,5 +1,5 @@
 
-load(['test_search/est_results/',species,'/params/',method,'.mat'])
+load([results_dir,species,'/params/',method,'.mat'])
 
 u_c = theta.theta_c.u;
 sigma_c = theta.theta_c.sigma;

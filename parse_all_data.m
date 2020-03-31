@@ -11,6 +11,7 @@ list_species = {
 % 'S.cerevisiae3'
 % 'E.coli'
 % 'A.thaliana'
+
 % 'HeLa01ng'
 % 'HeLa1ng'
 % 'HeLa10ng'
@@ -20,12 +21,13 @@ list_species = {
 % 'HeLa1ng.2'
 % 'HeLa10ng.2'
 % 'HeLa50ng.2'
-'HeLa100ng.2'
+% 'HeLa100ng.2'
 % 'HeLa01ng.3'
 % 'HeLa1ng.3'
 % 'HeLa10ng.3'
 % 'HeLa50ng.3'
 % 'HeLa100ng.3'
+
 % 'c_elegans'
 % 'drosophila'
 % 'e_coli'

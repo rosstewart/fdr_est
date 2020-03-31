@@ -37,6 +37,8 @@ plot(x_values,y1,'LineWidth',2);
 
 histogram(s1,200,'Normalization','pdf');
 
+xlabel('-log(EValue)')
+ylabel('PDF');
 legend({'dist\_correct'; 'dist\_incorrect'; 'mixture'; 'hist\_first'});
 
 % subplot(nsp,2,2)
@@ -67,7 +69,7 @@ legend({'dist\_correct'; 'dist\_incorrect'; 'mixture'; 'hist\_first'});
 % end
 
 % results_folder = 'test_search/fragger_results/';
-results_folder = 'test_search/est_results/';
+results_folder = 'test_search/est_results_nist/';
 
 species_folder = [results_folder,species];
 

@@ -1,7 +1,7 @@
 
 method = '_2s3ci';
 
-load(['test_search/est_results/',species,'/params/',method,'.mat'])
+load([results_dir,species,'/params/',method,'.mat'])
 
 alpha = theta.alpha;
 beta = theta.beta;

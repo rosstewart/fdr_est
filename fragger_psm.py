@@ -24,10 +24,10 @@ psm_dir = 'test_search/pride/fragger/'
 #species = 'M.musculus'
 #species = 'M.musculus2'
 #species = 'M.musculus3'
-#species = 'H.sapiens2'
+species = 'H.sapiens2'
 #species = 'H.sapiens3'
 #species = 'C.elegans'
-species = 'D.melanogaster'
+#species = 'D.melanogaster'
 #species = 'S.cerevisiae'
 #species = 'S.cerevisiae2'
 #species = 'S.cerevisiae3'
@@ -86,7 +86,10 @@ spec_pep_map = {}
 for psm in psm_list:
     if psm.protein[0:3] == 'REV':
         ndecoy += 1
-        qval = ndecoy / n
+        if n == 0:
+            qval = 0
+        else:
+            qval = ndecoy / n
         psm.qval = qval
         continue
 #    qval = float(psm.QValue)

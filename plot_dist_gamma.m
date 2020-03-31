@@ -37,9 +37,12 @@ plot(x_values,y1,'LineWidth',2);
 
 histogram(s1,200,'Normalization','pdf');
 
+xlabel('-log(EValue)')
+ylabel('PDF');
 legend({'dist\_correct'; 'dist\_incorrect'; 'mixture'; 'hist\_first'});
 
-species_folder = ['test_search/est_results/',species];
+
+species_folder = ['test_search/est_results_nist/',species];
 if ~ exist(species_folder)
     mkdir(species_folder)
     mkdir([species_folder,'/distplot'])

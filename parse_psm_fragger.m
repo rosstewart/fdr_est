@@ -5,7 +5,7 @@
 % species = 'M.musculus'
 % species = 'M.musculus2'
 % species = 'M.musculus3'
-% species = 'H.sapiens2'
+species = 'H.sapiens2'
 % species = 'H.sapiens3'
 % species = 'C.elegans'
 % species = 'D.melanogaster'
@@ -85,5 +85,5 @@ specind = find(slen>=2);
 mat2 = mat(specind,1:2);
 
 
-save(['test_search/matdata/',species,'_data.mat'], 'species', 'omat', 'smat', 'mat', 'mat2', 'mat3', 'slen');
+save(['test_search/matdata/fragger/',species,'_data.mat'], 'species', 'omat', 'smat', 'mat', 'mat2', 'mat3', 'slen');
 

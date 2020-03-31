@@ -16,32 +16,55 @@ method_list = [
         '_1s2ca',
 #        '_2s2ci',
         '_2s3ci',
-        '_2s3ct',
-#        '_3s4ci'
+#        '_2s3ct',
+#        '_3s4ci',
     ]
 
+shantanu_m_l = ['SNMax1',]
+
+method_list += shantanu_m_l
+
+#species_list = [
+#        'A.thaliana',
+##        'C.elegans',
+#        'D.melanogaster',
+#        'E.coli',
+#        'H.sapiens2',
+#        'H.sapiens3',
+#        'M.musculus',
+#        'M.musculus2',
+#        'M.musculus3',
+##        'S.cerevisiae',
+#        'S.cerevisiae2',
+#        'S.cerevisiae3',
+#    ]
+#
 species_list = [
-        'A.thaliana',
-#        'C.elegans',
-        'D.melanogaster',
-        'E.coli',
-        'H.sapiens2',
-        'H.sapiens3',
-        'M.musculus',
-        'M.musculus2',
-        'M.musculus3',
-#        'S.cerevisiae',
-        'S.cerevisiae2',
-        'S.cerevisiae3',
+        'HeLa01ng',
+        'HeLa1ng',
+        'HeLa10ng',
+        'HeLa50ng',
+        'HeLa100ng'
     ]
+
+#species_list = [
+#        'c_elegans',
+#        'drosophila',
+#        'e_coli',
+#        'human',
+#        'mouse'
+#    ]
+
+#result_dir = 'test_search/est_results_nist/'
+result_dir = 'test_search/est_results/'
 
 #%%
 subfigure_width = 0.5
-template = open('subfigure_template').read()
+template = open('template_subfigure.txt').read()
 
 #%%
 import csv
-thres_map = csv.DictReader(open('test_search/est_results/thresholds.txt'), delimiter='\t')
+thres_map = csv.DictReader(open(result_dir+'thresholds.txt'), delimiter='\t')
 thres_map = { row['species']+row['method'] : (float(row['thres']), float(row['thres_cor']), float(row['thres2'])) for row in thres_map}
 #%%
 def list_params(params):
@@ -70,6 +93,8 @@ def gen_latex(species, method):
     def replace_var(k):
         nonlocal content
         v = str(eval(k))
+        if k == 'species':
+            v = v.replace('_', '.')
         content = content.replace('!'+k, v)
     
     replace_var('subfigure_width')
@@ -80,36 +105,42 @@ def gen_latex(species, method):
     replace_var('model')
     
     params = {}
-    paramfile = 'test_search/est_results/'+species+'/params/'+method+'.mat'
-    theta = sio.loadmat(paramfile)['theta']
-#    if 'theta_i' in theta:
+    paramfile = result_dir+species+'/params/'+method+'.mat'
     
-    params['\\alpha'] = theta['alpha'][0,0][0,0]
-    if int(method[3]) in [3,]:
-        params['\\beta'] = theta['beta'][0,0][0,0]
+    if method in shantanu_m_l:
+        content.replace('!params, ', '')
+    else:
+        theta = sio.loadmat(paramfile)['theta']
+    #    if 'theta_i' in theta:
+        
+        params['\\alpha'] = theta['alpha'][0,0][0,0]
+        if int(method[3]) in [3,]:
+            params['\\beta'] = theta['beta'][0,0][0,0]
+        
+        def put_param(p, s):
+            v = theta['theta_'+s][0,0][p][0,0][0,0]
+            if p == 'u':
+                p = '\mu'
+            params['%s_{%s}'%(p, s.upper())] = v
+        print(method, species)
+        put_param('u', 'c')
+        if type_D in ['s', 't']:
+            put_param('u', 'i')
+        elif type_D == 'a':
+            put_param('a', 'i')
+        
+        if int(num_D) > 2:
+            put_param('u', 'i2')
+        if int(num_D) > 3:
+            put_param('u', 'i3')
+        params = list_params(params)
+        print(params)
+        
+        replace_var('params')
     
-    def put_param(p, s):
-        v = theta['theta_'+s][0,0][p][0,0][0,0]
-        if p == 'u':
-            p = '\mu'
-        params['%s_{%s}'%(p, s.upper())] = v
-    print(method, species)
-    put_param('u', 'c')
-    if type_D in ['s', 't']:
-        put_param('u', 'i')
-    elif type_D == 'a':
-        put_param('a', 'i')
-    
-    if int(num_D) > 2:
-        put_param('u', 'i2')
-    if int(num_D) > 3:
-        put_param('u', 'i3')
-    params = list_params(params)
-    print(params)
-    
-    llfile = 'test_search/est_results/'+species+'/ll/'+method+'.mat'
-    sdcdffile = 'test_search/est_results/'+species+'/sdcdf/'+method+'.mat'
-    meanfile = 'test_search/est_results/'+species+'/mean/'+method+'.mat'
+    llfile = result_dir+species+'/ll/'+method+'.mat'
+    sdcdffile = result_dir+species+'/sdcdf/'+method+'.mat'
+    meanfile = result_dir+species+'/mean/'+method+'.mat'
 
     lls = sio.loadmat(llfile)
     ll = []
@@ -133,10 +164,14 @@ def gen_latex(species, method):
             k = '%s_{%s}'%(k[0], k[1].upper())
             mean.append('$%s=%.4f$'%(k,v[0,0]))
     mean = ', '.join(mean)
+    
+#    thres_true = open(result_dir+species+'/true_thres.txt')
+#    thres_true = thres_true.read().rstrip()
+    
     replace_var('thres2')
     replace_var('thres_cor')
+#    replace_var('thres_true')
     replace_var('thres')
-    replace_var('params')
     replace_var('ll')
     replace_var('mean')
 #    print(content)

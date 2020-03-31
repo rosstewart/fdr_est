@@ -14,6 +14,12 @@
 % species = 'S.cerevisiae3'
 % species = 'E.coli'
 % species = 'A.thaliana'
+% species = 'HeLa1ng'
+% species = 'HeLa01ng_2'
+% species = 'HeLa10ng'
+% species = 'HeLa50ng'
+% species = 'HeLa100ng'
+
 
 % method = '_3s4c'
 % method = '_3mix'

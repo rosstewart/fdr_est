@@ -10,6 +10,7 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import scipy.io as sio
 
 #method = '_2mix'
 #method = '_3mix'
@@ -21,7 +22,7 @@ method_list = [
         '_1s2ca',
 #        '_2s2ci',
         '_2s3ci',
-        '_2s3ct',
+#        '_2s3ct',
 #        '_3s4ci'
     ]
 
@@ -38,25 +39,53 @@ species = 'A.thaliana'
 #species = 'S.cerevisiae2'
 #species = 'S.cerevisiae3'
 
-species_list = [
-        'A.thaliana',
-#        'C.elegans',
-        'D.melanogaster',
-        'E.coli',
-        'H.sapiens2',
-        'H.sapiens3',
-        'M.musculus',
-        'M.musculus2',
-        'M.musculus3',
-#        'S.cerevisiae',
-        'S.cerevisiae2',
-        'S.cerevisiae3',
-    ]
+#species_list = [
+#        'A.thaliana',
+##        'C.elegans',
+#        'D.melanogaster',
+#        'E.coli',
+#        'H.sapiens2',
+#        'H.sapiens3',
+#        'M.musculus',
+#        'M.musculus2',
+#        'M.musculus3',
+##        'S.cerevisiae',
+#        'S.cerevisiae2',
+#        'S.cerevisiae3',
+#    ]
 
+species_list = [
+        'HeLa01ng',
+        'HeLa1ng',
+        'HeLa10ng',
+        'HeLa50ng',
+        'HeLa100ng',
+        'HeLa01ng.2',
+        'HeLa1ng.2',
+        'HeLa10ng.2',
+        'HeLa50ng.2',
+        'HeLa100ng.2',
+        'HeLa01ng.3',
+        'HeLa1ng.3',
+        'HeLa10ng.3',
+        'HeLa50ng.3',
+        'HeLa100ng.3',
+    ]
+#species_list = [
+#        'c_elegans',
+#        'drosophila',
+#        'e_coli',
+#        'human',
+#        'mouse'
+#    ]
 psm_dir = 'test_search/pride/'
 #psm_dir = 'test_search/pride/fragger/'
+#psm_dir = 'nist/'
 
-thres_output = open('test_search/est_results/thresholds.txt', 'w')
+#result_dir = 'test_search/est_results_nist/'
+result_dir = 'test_search/est_results/'
+
+thres_output = open(result_dir + 'thresholds.txt', 'w')
 thres_output.write('species\tmethod\tthres\tthres_cor\tthres2\n')
 
 def plot_fdrcurv(species, method):
@@ -139,7 +168,7 @@ def plot_fdrcurv(species, method):
     pepcurv = np.array(pepcurv)
     
     #%%
-    species_dir = 'test_search/est_results/'+species#+'/'
+    species_dir = result_dir+species#+'/'
     twomix = open(species_dir+'/fdr/'+method+'.csv')
     twomix = np.genfromtxt(species_dir+'/fdr/'+method+'.csv', delimiter=',')
     #%%
@@ -152,7 +181,7 @@ def plot_fdrcurv(species, method):
     fig.savefig(species_dir+'/fdrcurv/%s.png'%(method))
     
     #%%
-    paramfile = 'test_search/est_results/'+species+'/params/'+method+'.mat'
+    paramfile = result_dir+species+'/params/'+method+'.mat'
     theta = sio.loadmat(paramfile)['theta']
     alpha = theta['alpha'][0,0][0,0]
     print(alpha)
@@ -174,6 +203,7 @@ def plot_fdrcurv(species, method):
     nmatches2 = 0
     eval_fdr_map = {}
     
+    thres2 = 60
     for fdr,n,s in twomix:
         eval_fdr_map[s] = fdr
     for fdr,n,s in twomix:
@@ -193,7 +223,7 @@ def plot_fdrcurv(species, method):
     #matches = open('test_search/Adult_Adrenalgland_Gel_Elite_49_f01_d.tsv')
     #matches = open('test_search/isb02_t3_nodecoy.tsv')
     #matches = open('test_search/pride/H.sapiens_nod.tsv')
-    matches = open('test_search/pride/%s_nod.tsv'%species)
+    matches = open(psm_dir+'%s_nod.tsv'%species)
     matches_csv = csv.DictReader(matches, delimiter='\t')
     
     n2 = 0

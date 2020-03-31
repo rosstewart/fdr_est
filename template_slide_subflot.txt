@@ -1,0 +1,11 @@
+
+\begin{figure}
+\centering
+\subfloat[PDF fitting]{
+  \includegraphics[width=!subfigure_width\textwidth]{figures/{!species}/distplot/!method.png}
+}
+\subfloat[CDF fitting]{
+  \includegraphics[width=!subfigure_width\textwidth]{figures/{!species}/fitcurv/!method.png}
+}
+\caption{D=!species !num_SS, !num_DD, !dep, !model. $\tau = !thres2$, $\tau_{\text{TDA}}=!thres$, $\tau_{\text{TDA PIT}}=!thres_cor$, !params, !ll, !sdcdf, !mean.}
+\end{figure}

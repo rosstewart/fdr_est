@@ -1,5 +1,5 @@
 
-load(['test_search/est_results/',species,'/params/',method,'.mat'])
+load([results_dir,species,'/params/',method,'.mat'])
 
 [u_c, sigma_c, lambda_c] = unpack_skntheta(theta.theta_c);
 [u_i, sigma_i, lambda_i] = unpack_skntheta(theta.theta_i);

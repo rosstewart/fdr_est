@@ -14,11 +14,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import json
-
+from collections import defaultdict
 
 import scipy.io as sio
 
-latex_output = open('latex_slides_snippet.txt', 'w')
 
 #%%
 method_list = [
@@ -34,8 +33,8 @@ shantanu_m_l = ['SNMax1',]
 #
 #method_list += shantanu_m_l
 
-data_source = 'HeLa'
-#data_source = 'NIST'
+#data_source = 'HeLa'
+data_source = 'NIST'
 
 if data_source == 'PRIDE':
     species_list = [
@@ -75,6 +74,8 @@ elif data_source == 'HeLa':
         ]
     result_dir = 'test_search/est_results/'
     data_source = ''
+    psm_dir = 'test_search/pride/'
+    data_dir = 'test_search/matdata_hela/'
 
 elif data_source == 'NIST':
     species_list = [
@@ -86,205 +87,165 @@ elif data_source == 'NIST':
         ]
     result_dir = 'test_search/est_results_nist/'
     data_source = 'NIST'
-
-
-
-#%%
-def split_comments(comment):
-    ret = ''
-    quote = False
-    for c in comment:
-        if c == ' ' and not quote:
-            yield ret
-            ret = ''
-        elif c == '"':
-            quote = not quote
-        else:
-            ret += c
-            
+    psm_dir = 'nist/'
+    data_dir = 'test_search/matdata_nist/'
 
 #%%
-
-def parse_msp(msplist):
-    peaks = []
-    item = {}
-    for l in msplist:
-        if not l:
-            item['Peaks'] = peaks
-            
-            props = {k:v for k,v in map(lambda x: x.split('=', 1), split_comments(item['Comment']))}
-            item['Props'] = props
-#            print(len(peaks))
-            yield item
-            item = {}
-            peaks = []
-            continue
-            
-        if ': ' not in l:
-            peak = l.split('\t')
-    #        print(peak)
-            peaks.append(peak)
-            continue
-    #        peaks.append()
-        
-        [k, v] = l.split(': ', 1)
-    #    print(k,v)
-        if not item:
-            assert(k == 'Name')
-        item[k] = v
-    yield item
     
+class Entity(object):
+    def __init__(self, rawdata):
+        self.__dict__['_raw'] = rawdata
+    def __getattr__(self, key):
+        if key == '_raw':
+            return
+        if key in self._raw:
+            return self._raw[key]
+        else:
+            return super().__getattribute__(key)
+    def __setattr__(self, key, val):
+        self._raw[key] = val
+    def __getitem__(self, key):
+        return self._raw[key]
+    def __repr__(self):
+        return str(self._raw)
+
+class PSM(Entity):
+    def __repr__(self):
+        return "%s: %s %s" % (self.scannum, self.expectscore, self.peptide)
+
 
 #%%
+evalue_field = 'SpecEValue'
 
-#%%
+def get_psms(species):
+    psm_file = psm_dir + species + '_nod.tsv'
+    ss = csv.DictReader(open(psm_file), delimiter='\t')
+    
+    psmlist = []
+    previd = None
+    for row in ss:
+        specid = row['SpecID']
+        if specid != previd:
+            if psmlist:
+                yield psmlist
+            previd = specid
+            psmlist = []
+        psm = PSM(row)
+        psmlist.append(psm)
+    if psmlist:
+        yield psmlist
 
-
-def get_first_psms(ss):
+def get_psm_lists(species):
+    psm_file = psm_dir + species + '_nod.tsv'
+    ss = csv.DictReader(open(psm_file), delimiter='\t')
+    
     prevspec = None
-        
+    psmlist = []
     for row in ss:
     #    print(row)
-        
-        if row['Protein'][0:3] == 'REV':
-            continue
-        
         ind = int(row['SpecID'].split('=')[1])
-        if prevspec == ind:
-            continue
+        if prevspec != ind:
+            if psmlist:
+                yield (prevspec, psmlist)
+                psmlist = []
         prevspec = ind
         
-        qval = float(row['QValue'])
-        if qval == 1:
-            continue
-        yield (ind, row['Peptide'], row['SpecEValue'])
-#    break
-
-def match_peptide(p_nist, p_msgf):
-    i=0
-    j=0
-#    print(p_nist, p_msgf)
-    if p_msgf[1] == '.':
-        while p_msgf[j] != '.':
-            j += 1
-        j += 1
-    while True:
-#        print(p_nist[i])
-        if p_nist[i] == '/':
-            return True
-        if j >= len(p_msgf):
-            return False
-        if p_msgf[j] in '+.0123456789':
-#            print(p_msgf[j], j, len(p_msgf))
-            j += 1
-            continue
-        
-        if p_nist[i] != p_msgf[j]:
-            print(False, p_nist, p_msgf)
-            return False
-        
-        i += 1
-        j += 1
-    
-    return True
-
-
+        psmlist.append((row['Peptide'], float(row['SpecEValue'])))
+    if psmlist:
+        yield (prevspec, psmlist)
 
 #%%
-
-method_map = {
-        '1S2D gamma & gaussian': '_1s2ca',
-        '1S2D skew normal': '_1s2c',
-        '2S3D skew normal': '_2s3c',
-    }
-
-def get_truefdr(species):
-    species_dir = result_dir + species + '/'
-    
-    def get_peps(species):
-        #mspfile = open('nist/human_consensus_final_true_lib.msp')
-        mspfile = tarfile.open('nist/'+species+'_consensus_final_true_lib.tar.gz', 'r|gz')
-        tarinfo = mspfile.next()
-        mspfile = mspfile.extractfile(tarinfo)
+def extract_mat(species):
+    psms = get_psms(species)
         
-        msplist = (l.decode("utf-8").rstrip() for l in mspfile)
+    i = 0
+#    mat = np.zeros([len(psms), 10])
+#    smat = np.zeros([len(psms), 10])
+    slen = []
+    mat = []
+    smat = []
         
-        peps = []
-        for item in parse_msp(msplist):
-            if not item:
+    for psmlist in psms:
+    #    print(scannum, len(psmlist))
+        
+        slist = [0]*10
+        sslist = [0]*10
+        
+        slen.append(len(psmlist))
+        j = 0
+#        prevs = 0
+        for psm in psmlist:
+    #    for j, psm in enumerate(psmlist):
+            if j >= 10:
+                break
+            if j > 0 and slist[j-1] == -np.log(float(psm[evalue_field])):
                 continue
-            peps.append(item['Name'])
-        return peps
-    
-    peps = get_peps(species)
-    
-    def get_truefdr(species):
-        f = open('nist/'+species+'_d.tsv')
-        psmcsv = csv.DictReader(f, delimiter='\t')
+            slist[j] = -np.log(float(psm[evalue_field]))
+            sslist[j] = float(psm[evalue_field])
+            j += 1
         
-        psms = get_first_psms(psmcsv)
-        matches = []
-        for spec, pep, score in psms:
-        #    print(peps[spec], pep)
-            matches.append((match_peptide(peps[spec], pep), score))
-        #    print(match_peptide(peps[spec], pep))
+        mat.append(slist)
+        smat.append(sslist)
+        i += 1
+
+    slen = np.array(slen)
+    
+    mat = np.array(mat)
+    smat = np.array(smat)
+    omat = mat
+    print(omat)
+    mat2 = omat[slen>=2,0:2]
+    mat3 = omat[slen>=3,0:3]
+    matobj = {'mat': mat, 'omat': omat, 'mat2': mat2, 'mat3': mat3, 'smat': smat,
+              'species': species}
+#        sio.savemat('test_search/matdata_hela/'+species+'_c'+c+'_data.mat', matobj)
+    sio.savemat(data_dir+species+'_data.mat', matobj)
+
+
+def extract_rep_mat(species):
+    psm_lists = get_psm_lists(species)
+        
+    i = 0
+#    mat = np.zeros([len(psms), 10])
+#    smat = np.zeros([len(psms), 10])
+    slen = []
+    matches = {}
+    
+    for spec, psmlist in psm_lists:
+    #    print(scannum, len(psmlist))
+        
+#        slist = [0]*10
+#        sslist = [0]*10
+        slist = []
+        
+        slen.append(len(psmlist))
+        j = 0
+#        prevs = 0
+        prevs = 0
+        for pep, s in psmlist:
             
-        n = 0
-        fc = 0
-        qstart = 0
-        qvals = np.zeros(len(matches))
-        curv = []
-        ncorr = 0
-        nwrong = 0
-        for m, score in matches:
-        #    print(row)
-            n += 1
-            if not m:
-                qval = fc / n
-                curv.append((qval, n, score))
-                qvals[qstart:n-1] = qval
-                fc += 1
-                qstart = n-1
-                nwrong += 1
-            else:
-                ncorr += 1
+            if prevs and prevs != s:
+                break
             
-            print(fc, n, fc/n)
+            prevs = s
+            slist.append((pep, s))
+            
+            j += 1
         
-        print('correct vs wrong', ncorr, nwrong)
-        
-        qval = fc / n
-        qvals[qstart:n] = qval
-        curv.append((qval, n, score))
-        curv = np.array(curv, dtype=float)
-        curv[:,2] = -np.log(curv[:,2])
-        true_fdr = np.array(qvals)
-        print(n)
+        matches[spec] = slist
+        i += 1
+
     
-#        true_thres = 0
-#        for fdr,n,s in curv:
-#            if fdr > 0.01:
-#                break
-#        #    nmatches = n
-#            true_thres = s
-        
-#        ttfile = open(species_dir + 'true_thres_tda.txt', 'w')
-#        ttfile.write("%f\n"%true_thres)
-#        ttfile.close()
-        
-        return true_fdr
+#    mat = np.array(mat)
     
-    true_fdr = get_truefdr(species)
-    
-    
-    fdr_dir = species_dir + 'fdr/'
-    truefdr_file = fdr_dir + 'true_tda.csv'
-    
-    np.savetxt(truefdr_file, true_fdr)
-    
-    return true_fdr
-        
+#    np.savetxt(data_dir+species+'_rep.csv', mat)
+    json.dump(matches, open(data_dir+species+'_rep.json', 'w'))
+
+
+
 #%%
 for species in species_list:
-    get_truefdr(species)
+    print(species)
+#    extract_mat(species)
+    extract_rep_mat(species)
 

@@ -12,7 +12,7 @@ list_species = {
 'M.musculus3'
 % 'S.cerevisiae'
 'S.cerevisiae2'
-'S.cerevisiae3'
+% 'S.cerevisiae3'
 }
 
 

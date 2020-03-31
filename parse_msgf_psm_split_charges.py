@@ -192,6 +192,6 @@ def extract_mat(species):
 
 #%%
 for species in species_list:
-#    print(species)
+    print(species)
     extract_mat(species)
 

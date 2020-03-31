@@ -7,21 +7,46 @@ clear
 %     'M.musculus3';
 %     };
 % clear
+% 
+% list_species = {
+% 'A.thaliana'
+% % 'C.elegans'
+% 'D.melanogaster'
+% 'E.coli'
+% 'H.sapiens2'
+% 'H.sapiens3'
+% 'M.musculus'
+% 'M.musculus2'
+% 'M.musculus3'
+% % 'S.cerevisiae'
+% 'S.cerevisiae2'
+% 'S.cerevisiae3'
+% };
 
 list_species = {
-'A.thaliana'
-% 'C.elegans'
-'D.melanogaster'
-'E.coli'
-'H.sapiens2'
-'H.sapiens3'
-'M.musculus'
-'M.musculus2'
-'M.musculus3'
-% 'S.cerevisiae'
-'S.cerevisiae2'
-'S.cerevisiae3'
+    'HeLa01ng'
+    'HeLa1ng'
+    'HeLa10ng'
+    'HeLa50ng'
+    'HeLa100ng'
+    'HeLa01ng.2'
+    'HeLa1ng.2'
+    'HeLa10ng.2'
+    'HeLa50ng.2'
+    'HeLa100ng.2'
+    'HeLa01ng.3'
+    'HeLa1ng.3'
+    'HeLa10ng.3'
+    'HeLa50ng.3'
+    'HeLa100ng.3'
 };
+% list_species = {
+%     'c_elegans'
+%     'drosophila'
+%     'e_coli'
+%     'human'
+%     'mouse'
+% };
 % species = 'M.musculus'
 % species = 'H.sapiens'
 % species = 'H.sapiens2'
@@ -41,8 +66,10 @@ list_methods = {
     '_1s2ca';
     '_1s2c';
     '_2s3ci';
-    '_2s3ct';
+%     '_2s3ct';
 };
+
+results_dir = 'test_search/est_results/';
 
 n = size(list_species, 1);
 
@@ -51,7 +78,7 @@ m = size(list_methods, 1);
 for i = 1:n
     species = list_species{i};
 
-    species_folder = ['test_search/est_results/',species];
+    species_folder = [results_dir,species];
     param_folder = [species_folder,'/params/'];
     ll_folder = [species_folder,'/ll/'];
     if ~exist(ll_folder)
@@ -64,7 +91,9 @@ for i = 1:n
     for j = 1:m
         method = list_methods{j};
 
-        load(['test_search/matdata/',species,'_data.mat'])
+        load(['test_search/matdata_hela/',species,'_data.mat'])
+%         load(['test_search/matdata_hela/',species,'_data.mat'])
+%         load(['test_search/matdata/nist/',species,'_data.mat'])
         S = omat';
         s1 = S(1,:);
         s1 = s1(s1~=0);
