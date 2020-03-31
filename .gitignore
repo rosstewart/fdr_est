@@ -2,6 +2,8 @@
 .*
 *~*
 
+*log
+
 test_search
 test_search/pride
 test_search/fragger_results
