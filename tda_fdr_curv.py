@@ -28,34 +28,35 @@ import matplotlib.pyplot as plt
 #        'S.cerevisiae3',
 #    ]
 
-species_list = [
-        'HeLa01ng',
-        'HeLa1ng',
-        'HeLa10ng',
-        'HeLa50ng',
-        'HeLa100ng',
-        'HeLa01ng.2',
-        'HeLa1ng.2',
-        'HeLa10ng.2',
-        'HeLa50ng.2',
-        'HeLa100ng.2',
-        'HeLa01ng.3',
-        'HeLa1ng.3',
-        'HeLa10ng.3',
-        'HeLa50ng.3',
-        'HeLa100ng.3',
-    ]
-
 #species_list = [
-#        'c_elegans',
-#        'drosophila',
-#        'e_coli',
-#        'human',
-#        'mouse'
+#        'HeLa01ng',
+#        'HeLa1ng',
+#        'HeLa10ng',
+#        'HeLa50ng',
+#        'HeLa100ng',
+#        'HeLa01ng.2',
+#        'HeLa1ng.2',
+#        'HeLa10ng.2',
+#        'HeLa50ng.2',
+#        'HeLa100ng.2',
+#        'HeLa01ng.3',
+#        'HeLa1ng.3',
+#        'HeLa10ng.3',
+#        'HeLa50ng.3',
+#        'HeLa100ng.3',
 #    ]
 
-psm_dir = 'test_search/pride/'
-#psm_dir = 'nist/'
+species_list = [
+        'c_elegans',
+        'drosophila',
+        'e_coli',
+        'human',
+        'mouse',
+        'yeast',
+    ]
+
+#psm_dir = 'test_search/pride/'
+psm_dir = 'test_search/nist/'
 
 #%%
 def get_tda_fdr(species):
@@ -111,5 +112,5 @@ for species in species_list:
 #    break
 
 #%%
-json.dump(tda_fdrs, open('test_search/est_results/json/tda_fdr.json', 'w'))
-#json.dump(tda_fdrs, open('test_search/est_results_nist/json/tda_fdr.json', 'w'))
+#json.dump(tda_fdrs, open('test_search/est_results/json/tda_fdr.json', 'w'))
+json.dump(tda_fdrs, open('test_search/est_results_nist/json/tda_fdr.json', 'w'))

@@ -1,5 +1,6 @@
 method='_2s3ci'
 [alpha, beta, u_c, sigma_c, lambda_c, u_i, sigma_i, lambda_i, u_i2, sigma_i2, lambda_i2] = EM3(omat',1,1,1)
+% em_2s3ci_with_8init
 plot_dist
 
 species_folder = ['test_search/est_results/',species];

@@ -42,7 +42,7 @@ ylabel('PDF');
 legend({'dist\_correct'; 'dist\_incorrect'; 'mixture'; 'hist\_first'});
 
 
-species_folder = ['test_search/est_results_nist/',species];
+species_folder = ['test_search/est_results/',species];
 if ~ exist(species_folder)
     mkdir(species_folder)
     mkdir([species_folder,'/distplot'])

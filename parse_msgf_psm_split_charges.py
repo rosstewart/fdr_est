@@ -11,7 +11,6 @@ import tarfile
 
 import csv
 import numpy as np
-import matplotlib.pyplot as plt
 
 import json
 from collections import defaultdict
@@ -74,7 +73,7 @@ elif data_source == 'HeLa':
         ]
     result_dir = 'test_search/est_results/'
     data_source = ''
-    psm_dir = 'test_search/pride/'
+    psm_dir = 'test_search/HeLa/'
 
 elif data_source == 'NIST':
     species_list = [

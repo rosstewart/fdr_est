@@ -1,17 +1,17 @@
 clear
 
 list_species = {
-'A.thaliana'
-% 'C.elegans'
-'D.melanogaster'
+% 'A.thaliana'
+% % 'C.elegans'
+% 'D.melanogaster'
 'E.coli'
-'H.sapiens2'
-'H.sapiens3'
-'M.musculus'
-'M.musculus2'
-'M.musculus3'
-% 'S.cerevisiae'
-'S.cerevisiae2'
+% 'H.sapiens2'
+% 'H.sapiens3'
+% 'M.musculus'
+% 'M.musculus2'
+% 'M.musculus3'
+% % 'S.cerevisiae'
+% 'S.cerevisiae2'
 % 'S.cerevisiae3'
 }
 

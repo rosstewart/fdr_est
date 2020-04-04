@@ -32,6 +32,7 @@ species_list = [
         'e_coli',
         'human',
         'mouse',
+        'yeast',
     ]
 
 #%%
@@ -130,14 +131,14 @@ def get_psm_lists(ss):
 def match_aminoacid(a, b):
     if a == b:
         return True
-    if a == 'I' and b == 'L':
-        return True
-    if a == 'L' and b == 'I':
-        return True
-    if a == 'K' and b == 'Q':
-        return True
-    if a == 'Q' and b == 'K':
-        return True
+#    if a == 'I' and b == 'L':
+#        return True
+#    if a == 'L' and b == 'I':
+#        return True
+#    if a == 'K' and b == 'Q':
+#        return True
+#    if a == 'Q' and b == 'K':
+#        return True
     
     return False
 
@@ -153,6 +154,9 @@ def match_peptide(p_nist, p_msgf):
 #        print(p_nist[i])
         if p_nist[i] == '/':
             return True
+        if j >= len(p_msgf):
+            return False
+            #print(j, p_msgf, p_nist)
         if p_msgf[j] in '+.0123456789':
 #            print(p_msgf[j], j, len(p_msgf))
             j += 1
@@ -197,7 +201,7 @@ def get_truefdr(species):
     
     def get_peps(species):
         #mspfile = open('nist/human_consensus_final_true_lib.msp')
-        mspfile = tarfile.open('nist/'+species+'_consensus_final_true_lib.tar.gz', 'r|gz')
+        mspfile = tarfile.open('test_search/nist/'+species+'_consensus_final_true_lib.tar.gz', 'r|gz')
         tarinfo = mspfile.next()
         mspfile = mspfile.extractfile(tarinfo)
         
@@ -216,7 +220,7 @@ def get_truefdr(species):
     mismatches = []
     mis_rep = []
     def get_truefdr(species):
-        f = open('nist/'+species+'_nod.tsv')
+        f = open('test_search/nist/'+species+'_nod.tsv')
         psmcsv = csv.DictReader(f, delimiter='\t')
         
 #        psms = get_first_psms(psmcsv)

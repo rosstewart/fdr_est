@@ -32,6 +32,7 @@ species_list = [
         'e_coli',
         'human',
         'mouse',
+        'yeast',
     ]
 
 #%%
@@ -202,8 +203,8 @@ def plot_fdrcurv(species):
         ax.set_xlabel('Estimated FDR')
         ax.set_ylabel('True FDR')
         
-        ax.set_xlim(1e-5, 0.25)
-        ax.set_ylim(1e-5, 0.25)
+        ax.set_xlim(1e-5, 0.1)
+        ax.set_ylim(1e-5, 0.1)
             
         if log_scale:
             plt.xscale('log')
@@ -229,6 +230,11 @@ def plot_fdrcurv(species):
     draw_fdrcurv()
         
 #%%
+
+log_scale = False
+for species in species_list:
+    plot_fdrcurv(species)
+log_scale = True
 for species in species_list:
     plot_fdrcurv(species)
 
