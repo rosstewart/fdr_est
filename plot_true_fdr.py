@@ -27,11 +27,11 @@ import json
 
 
 species_list = [
-        'c_elegans',
-        'drosophila',
-        'e_coli',
-        'human',
-        'mouse',
+#        'c_elegans',
+#        'drosophila',
+#        'e_coli',
+#        'human',
+#        'mouse',
         'yeast',
     ]
 
@@ -162,6 +162,9 @@ def plot_fdrcurv(species):
     true_fdr_tda = np.genfromtxt(truefdr_tda_file)
     print(true_fdr_tda.shape)
     
+    fdr_correction_file = species_dir + 'fdr_correction.csv'
+    fdr_correction = np.genfromtxt(fdr_correction_file)
+    
     def draw_fdrcurv():
         estres = json.load(open(res_dir+'json/'+species+'.json'))
             
@@ -176,6 +179,7 @@ def plot_fdrcurv(species):
         for res in estres:
             method = method_map[res['algo']]
             est_fdr = list(reversed(res['fdr']))
+            est_fdr += fdr_correction
             max_fdr = np.maximum(max_fdr, max(est_fdr))
             ax.plot(est_fdr, true_fdr, linewidth=1)
             legends.append(res['algo'])

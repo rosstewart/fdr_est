@@ -38,25 +38,23 @@ list_species = {
 % 'HeLa50ng.3'
 % 'HeLa100ng.3'
 }
-% species = 'M.musculus'
-% species = 'H.sapiens'
-% species = 'H.sapiens2'
-% species = 'H.sapiens3'
-% species = 'H.sapiens4'
-% species = 'C.elegans'
-% species = 'D.melanogaster'
-% species = 'S.cerevisiae'
-% species = 'S.cerevisiae2'
-% species = 'S.cerevisiae3'
-% species = 'E.coli'
-% species = 'A.thaliana'
+list_species = {
+%     'c_elegans'
+%     'drosophila'
+%     'e_coli'
+%     'human'
+%     'mouse'
+    'yeast'
+}
 
-% species
+data_dir = 'test_search/matdata_nist/';
+
+results_folder = 'test_search/est_results_nist';
 
 n = size(list_species, 1)
 for i = 1:n
     species = list_species{i};
 %     run parse_psm.m
-    load(['test_search/matdata/',species,'_data.mat'])
+    load([data_dir,species,'_data.mat'])
     run_all
 end

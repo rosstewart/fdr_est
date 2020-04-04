@@ -145,8 +145,8 @@ method_map = {
         'SNMax2': 'SNMax2',
     }
 
-log_scale = False
-#log_scale = True
+#log_scale = False
+log_scale = True
 if log_scale:
     xgrid = np.power(10, np.arange(-5, 0, 0.01))
 else:
@@ -168,6 +168,9 @@ def get_fdrcurvs(species):
     true_fdr_tda = np.genfromtxt(truefdr_tda_file)
     print(true_fdr_tda.shape)
     
+    fdr_correction_file = species_dir + 'fdr_correction.csv'
+    fdr_correction = np.genfromtxt(fdr_correction_file)
+    
     def get_fdrcurv():
         estres = json.load(open(res_dir+'json/'+species+'.json'))
             
@@ -181,6 +184,7 @@ def get_fdrcurvs(species):
         for res in estres:
             method = method_map[res['algo']]
             est_fdr = list(reversed(res['fdr']))
+            est_fdr += fdr_correction
             max_fdr = np.maximum(max_fdr, max(est_fdr))
             
             curvs[res['algo']] = np.interp(xgrid, est_fdr, true_fdr)
@@ -253,9 +257,9 @@ ax.set_ylabel('True FDR')
 plt.legend(lines, legends)
 
 if log_scale:
-    plt.savefig('test_search/est_results/fdrcmp_log.png')
+    plt.savefig('test_search/est_results_nist/fdrcmp_log.png')
 else:
-    plt.savefig('test_search/est_results/fdrcmp.png')
+    plt.savefig('test_search/est_results_nist/fdrcmp.png')
 
 
 #%%

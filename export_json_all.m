@@ -33,23 +33,25 @@ clear
 %     'HeLa100ng.3'
 % };
 list_species = {
-    'c_elegans'
-    'drosophila'
-    'e_coli'
-    'human'
-    'mouse'
-	'yeast'
+%     'c_elegans'
+%     'drosophila'
+%     'e_coli'
+%     'human'
+%     'mouse'
+    'yeast'
 }
 
-json_dir = 'est_results_nist/json/';
-if ~exist(json_dir)
-    mkdir(json_dir)
-end
 
 % method = '_1s2c';
 
+data_dir = 'test_search/matdata_nist/';
+
 results_folder = 'test_search/est_results_nist/';
 
+json_dir = [results_folder, '/json/'];
+if ~exist(json_dir)
+    mkdir(json_dir)
+end
 
 list_methods = {
     '_1s2ca';

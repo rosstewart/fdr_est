@@ -3,7 +3,7 @@ method='_2s3ci'
 % em_2s3ci_with_8init
 plot_dist
 
-species_folder = ['test_search/est_results/',species];
+species_folder = [results_folder,species];
 % species_folder = ['fragger/est_results/',species];
 if ~exist('bootstrap_num')
     param_folder = [species_folder,'/params/'];

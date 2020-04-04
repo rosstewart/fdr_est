@@ -23,30 +23,31 @@ clear
 % 'S.cerevisiae3'
 % };
 
-list_species = {
-    'HeLa01ng'
-    'HeLa1ng'
-    'HeLa10ng'
-    'HeLa50ng'
-    'HeLa100ng'
-    'HeLa01ng.2'
-    'HeLa1ng.2'
-    'HeLa10ng.2'
-    'HeLa50ng.2'
-    'HeLa100ng.2'
-    'HeLa01ng.3'
-    'HeLa1ng.3'
-    'HeLa10ng.3'
-    'HeLa50ng.3'
-    'HeLa100ng.3'
-};
 % list_species = {
+%     'HeLa01ng'
+%     'HeLa1ng'
+%     'HeLa10ng'
+%     'HeLa50ng'
+%     'HeLa100ng'
+%     'HeLa01ng.2'
+%     'HeLa1ng.2'
+%     'HeLa10ng.2'
+%     'HeLa50ng.2'
+%     'HeLa100ng.2'
+%     'HeLa01ng.3'
+%     'HeLa1ng.3'
+%     'HeLa10ng.3'
+%     'HeLa50ng.3'
+%     'HeLa100ng.3'
+% };
+list_species = {
 %     'c_elegans'
 %     'drosophila'
 %     'e_coli'
 %     'human'
 %     'mouse'
-% };
+    'yeast'
+};
 % species = 'M.musculus'
 % species = 'H.sapiens'
 % species = 'H.sapiens2'
@@ -69,7 +70,10 @@ list_methods = {
 %     '_2s3ct';
 };
 
-results_dir = 'test_search/est_results/';
+data_dir = 'test_search/matdata_nist/';
+
+% results_dir = 'test_search/est_results/';
+results_dir = 'test_search/est_results_nist/';
 
 n = size(list_species, 1);
 
@@ -91,9 +95,8 @@ for i = 1:n
     for j = 1:m
         method = list_methods{j};
 
-        load(['test_search/matdata_hela/',species,'_data.mat'])
-%         load(['test_search/matdata_hela/',species,'_data.mat'])
-%         load(['test_search/matdata/nist/',species,'_data.mat'])
+        load([data_dir,species,'_data.mat'])
+
         S = omat';
         s1 = S(1,:);
         s1 = s1(s1~=0);

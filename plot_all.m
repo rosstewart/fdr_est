@@ -38,6 +38,8 @@ list_methods = {
 %     '_2s3ct';
 };
 
+data_dir = 'test_search/matdata_nist/';
+
 n = size(list_species, 1);
 
 n_m = size(list_methods, 1);
@@ -54,7 +56,7 @@ for i = 1:n
 
         species_folder = [results_folder,species];
 
-        load(['test_search/matdata_nist/', species, '_data.mat'])
+        load([data_dir, species, '_data.mat'])
         load([species_folder, '/params/', method, '.mat'])
 
         if strcmp(method, '_1s2c')

@@ -27,11 +27,11 @@ import json
 
 
 species_list = [
-        'c_elegans',
-        'drosophila',
-        'e_coli',
-        'human',
-        'mouse',
+#        'c_elegans',
+#        'drosophila',
+#        'e_coli',
+#        'human',
+#        'mouse',
         'yeast',
     ]
 
@@ -131,10 +131,10 @@ def get_psm_lists(ss):
 def match_aminoacid(a, b):
     if a == b:
         return True
-#    if a == 'I' and b == 'L':
-#        return True
-#    if a == 'L' and b == 'I':
-#        return True
+    if a == 'I' and b == 'L':
+        return True
+    if a == 'L' and b == 'I':
+        return True
 #    if a == 'K' and b == 'Q':
 #        return True
 #    if a == 'Q' and b == 'K':
@@ -219,6 +219,8 @@ def get_truefdr(species):
     reps = []
     mismatches = []
     mis_rep = []
+    p_mis = []
+    nomatch = []
     def get_truefdr(species):
         f = open('test_search/nist/'+species+'_nod.tsv')
         psmcsv = csv.DictReader(f, delimiter='\t')
@@ -232,8 +234,12 @@ def get_truefdr(species):
             pep, score = psmlist[0]
             rep = repmatch[str(spec)]
             m = match_peptide_list(peps[spec], psmlist)
+            nrep = len(rep)
             if m == 0:
                 matches.append((True, score))
+            elif m == -1:
+                nomatch.append([spec])
+                continue
             else:
                 matches.append((False, score))
                 mismatches.append([m, peps[spec],] + list(psmlist[0]))
@@ -242,6 +248,7 @@ def get_truefdr(species):
             if len(rep) > 1:
                 reps.append([m, (score), peps[spec], '\n'.join([pep for pep,s in rep])])
                 mis_rep.append([m, (score)])
+            p_mis.append(1-1/nrep)
                 
             #    print(match_peptide(peps[spec], pep))
             i += 1
@@ -291,6 +298,21 @@ def get_truefdr(species):
     
     true_fdr = get_truefdr(species)
     
+    def get_fdr_correction():
+        fdr_correction = []
+        n = 0
+        nwrong = 0
+        pwrong = 0
+        for p in p_mis:
+            nwrong += p
+            n += 1
+#            if nwrong >= 5:
+            pwrong = max(pwrong, nwrong / n)
+            fdr_correction.append(pwrong)
+        fdr_correction = np.array(fdr_correction)
+        np.savetxt(species_dir + 'fdr_correction.csv', fdr_correction)
+    get_fdr_correction()
+            
     
     repcsv = csv.writer(open(species_dir + 'rep.csv', 'w'))
     repcsv.writerows(reps)
@@ -300,6 +322,8 @@ def get_truefdr(species):
     repmis_csv = csv.writer(open(species_dir + 'repmis.csv', 'w'))
     repmis_csv.writerows(mis_rep)
     
+    nomatch_csv = csv.writer(open(species_dir + 'nomatch.csv', 'w'))
+    nomatch_csv.writerows(nomatch)
     
     
     fdr_dir = species_dir + 'fdr/'

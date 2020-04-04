@@ -79,11 +79,11 @@ elif data_source == 'HeLa':
 
 elif data_source == 'NIST':
     species_list = [
-            'c_elegans',
-            'drosophila',
-            'e_coli',
-            'human',
-            'mouse',
+            #'c_elegans',
+            #'drosophila',
+            #'e_coli',
+            #'human',
+            #'mouse',
             'yeast',
         ]
     result_dir = 'test_search/est_results_nist/'

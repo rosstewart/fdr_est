@@ -1,5 +1,5 @@
-% load(['test_search/matdata_hela/',species,'_data.mat'])
-load(['test_search/matdata_nist/',species,'_data.mat'])
+
+load([data_dir,species,'_data.mat'])
 species_folder = [results_folder,species];
 
 for me_j = 1:n_m
@@ -69,7 +69,7 @@ for me_j = 1:n_m
 end
 json = jsonencode(results_arr);
 
-fid = fopen(['test_search/est_results_nist/json/', species, '.json'],'wt');
+fid = fopen([json_dir, species, '.json'],'wt');
 fprintf(fid, json);
 fclose(fid);
 results_arr = {};

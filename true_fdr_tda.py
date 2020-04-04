@@ -35,15 +35,17 @@ import json
 
 
 species_list = [
-        'c_elegans',
-        'drosophila',
-        'e_coli',
-        'human',
-        'mouse',
+#        'c_elegans',
+#        'drosophila',
+#        'e_coli',
+#        'human',
+#        'mouse',
         'yeast',
     ]
 
 #%%
+
+data_dir = 'test_search/nist/'
     
 res_dir = 'test_search/est_results_nist/'
 
@@ -163,7 +165,7 @@ def get_truefdr(species):
     
     def get_peps(species):
         #mspfile = open('nist/human_consensus_final_true_lib.msp')
-        mspfile = tarfile.open('test_search/nist/'+species+'_consensus_final_true_lib.tar.gz', 'r|gz')
+        mspfile = tarfile.open(data_dir+species+'_consensus_final_true_lib.tar.gz', 'r|gz')
         tarinfo = mspfile.next()
         mspfile = mspfile.extractfile(tarinfo)
         
@@ -179,7 +181,7 @@ def get_truefdr(species):
     peps = get_peps(species)
     
     def get_truefdr(species):
-        f = open('test_search/nist/'+species+'_d.tsv')
+        f = open(data_dir+species+'_d.tsv')
         psmcsv = csv.DictReader(f, delimiter='\t')
         
         psms = get_first_psms(psmcsv)

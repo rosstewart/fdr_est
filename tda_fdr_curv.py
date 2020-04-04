@@ -58,6 +58,8 @@ species_list = [
 #psm_dir = 'test_search/pride/'
 psm_dir = 'test_search/nist/'
 
+result_dir = 'test_search/est_results_nist/'
+
 #%%
 def get_tda_fdr(species):
 #    species_dir = 'test_search/est_results/'+species#+'/'
@@ -112,5 +114,4 @@ for species in species_list:
 #    break
 
 #%%
-#json.dump(tda_fdrs, open('test_search/est_results/json/tda_fdr.json', 'w'))
-json.dump(tda_fdrs, open('test_search/est_results_nist/json/tda_fdr.json', 'w'))
+json.dump(tda_fdrs, open(result_dir+'json/tda_fdr.json', 'w'))
