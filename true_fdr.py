@@ -27,11 +27,11 @@ import json
 
 
 species_list = [
-#        'c_elegans',
-#        'drosophila',
-#        'e_coli',
-#        'human',
-#        'mouse',
+        'c_elegans',
+        'drosophila',
+        'e_coli',
+        'human',
+        'mouse',
         'yeast',
     ]
 
@@ -157,7 +157,7 @@ def match_peptide(p_nist, p_msgf):
         if j >= len(p_msgf):
             return False
             #print(j, p_msgf, p_nist)
-        if p_msgf[j] in '+.0123456789':
+        if p_msgf[j] in '-+.0123456789':
 #            print(p_msgf[j], j, len(p_msgf))
             j += 1
             continue
@@ -192,6 +192,9 @@ method_map = {
         '1S2D skew normal': '_1s2c',
         '2S3D skew normal': '_2s3c',
     }
+
+#skip_nomatch = True
+skip_nomatch = False
 
 def get_truefdr(species):
     species_dir = res_dir + species + '/'
@@ -229,17 +232,17 @@ def get_truefdr(species):
         psmlists = get_psm_lists(psmcsv)
         matches = []
         samescores = []
-        i = 0
-        for spec, psmlist in psmlists:
+#        i = 0
+        for i, (spec, psmlist) in enumerate(psmlists):
             pep, score = psmlist[0]
             rep = repmatch[str(spec)]
             m = match_peptide_list(peps[spec], psmlist)
             nrep = len(rep)
+            if skip_nomatch and m == -1:
+                nomatch.append([i])
+                continue
             if m == 0:
                 matches.append((True, score))
-            elif m == -1:
-                nomatch.append([spec])
-                continue
             else:
                 matches.append((False, score))
                 mismatches.append([m, peps[spec],] + list(psmlist[0]))
@@ -251,7 +254,7 @@ def get_truefdr(species):
             p_mis.append(1-1/nrep)
                 
             #    print(match_peptide(peps[spec], pep))
-            i += 1
+#            i += 1
             
         n = 0
         fc = 0

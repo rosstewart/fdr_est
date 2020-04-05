@@ -35,11 +35,11 @@ import json
 
 
 species_list = [
-#        'c_elegans',
-#        'drosophila',
-#        'e_coli',
-#        'human',
-#        'mouse',
+        'c_elegans',
+        'drosophila',
+        'e_coli',
+        'human',
+        'mouse',
         'yeast',
     ]
 

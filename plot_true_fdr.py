@@ -27,11 +27,11 @@ import json
 
 
 species_list = [
-#        'c_elegans',
-#        'drosophila',
-#        'e_coli',
-#        'human',
-#        'mouse',
+        'c_elegans',
+        'drosophila',
+        'e_coli',
+        'human',
+        'mouse',
         'yeast',
     ]
 
@@ -119,7 +119,7 @@ def match_peptide(p_nist, p_msgf):
 #        print(p_nist[i])
         if p_nist[i] == '/':
             return True
-        if p_msgf[j] in '+.0123456789':
+        if p_msgf[j] in '-+.0123456789':
 #            print(p_msgf[j], j, len(p_msgf))
             j += 1
             continue
@@ -148,6 +148,9 @@ method_map = {
 log_scale = False
 #log_scale = True
 
+skip_nomatch = True
+#skip_nomatch = False
+
 def plot_fdrcurv(species):
     species_dir = res_dir + species + '/'
     
@@ -165,6 +168,9 @@ def plot_fdrcurv(species):
     fdr_correction_file = species_dir + 'fdr_correction.csv'
     fdr_correction = np.genfromtxt(fdr_correction_file)
     
+    if skip_nomatch:
+        nomatch = np.genfromtxt(species_dir + 'nomatch.csv', dtype='int32')
+    
     def draw_fdrcurv():
         estres = json.load(open(res_dir+'json/'+species+'.json'))
             
@@ -179,6 +185,12 @@ def plot_fdrcurv(species):
         for res in estres:
             method = method_map[res['algo']]
             est_fdr = list(reversed(res['fdr']))
+            est_fdr = np.array(est_fdr)
+            if skip_nomatch:
+                flags = np.ones(est_fdr.shape[0],dtype=bool)
+                flags[nomatch] = 0
+                est_fdr = est_fdr[flags]
+            
             est_fdr += fdr_correction
             max_fdr = np.maximum(max_fdr, max(est_fdr))
             ax.plot(est_fdr, true_fdr, linewidth=1)
@@ -207,8 +219,8 @@ def plot_fdrcurv(species):
         ax.set_xlabel('Estimated FDR')
         ax.set_ylabel('True FDR')
         
-        ax.set_xlim(1e-5, 0.1)
-        ax.set_ylim(1e-5, 0.1)
+        ax.set_xlim(1e-3, 0.1)
+        ax.set_ylim(1e-3, 0.1)
             
         if log_scale:
             plt.xscale('log')

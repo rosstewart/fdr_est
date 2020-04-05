@@ -29,10 +29,11 @@ from collections import defaultdict
 
 species_list = [
         'c_elegans',
-        'drosophila',
+#        'drosophila',
         'e_coli',
         'human',
         'mouse',
+        'yeast',
     ]
 
 #%%
@@ -119,7 +120,7 @@ def match_peptide(p_nist, p_msgf):
 #        print(p_nist[i])
         if p_nist[i] == '/':
             return True
-        if p_msgf[j] in '+.0123456789':
+        if p_msgf[j] in '-+.0123456789':
 #            print(p_msgf[j], j, len(p_msgf))
             j += 1
             continue
@@ -147,6 +148,10 @@ method_map = {
 
 #log_scale = False
 log_scale = True
+
+skip_nomatch = True
+#skip_nomatch = False
+
 if log_scale:
     xgrid = np.power(10, np.arange(-5, 0, 0.01))
 else:
@@ -171,6 +176,9 @@ def get_fdrcurvs(species):
     fdr_correction_file = species_dir + 'fdr_correction.csv'
     fdr_correction = np.genfromtxt(fdr_correction_file)
     
+    if skip_nomatch:
+        nomatch = np.genfromtxt(species_dir + 'nomatch.csv', dtype='int32')
+    
     def get_fdrcurv():
         estres = json.load(open(res_dir+'json/'+species+'.json'))
             
@@ -184,6 +192,12 @@ def get_fdrcurvs(species):
         for res in estres:
             method = method_map[res['algo']]
             est_fdr = list(reversed(res['fdr']))
+            est_fdr = np.array(est_fdr)
+            if skip_nomatch:
+                flags = np.ones(est_fdr.shape[0],dtype=bool)
+                flags[nomatch] = 0
+                est_fdr = est_fdr[flags]
+                
             est_fdr += fdr_correction
             max_fdr = np.maximum(max_fdr, max(est_fdr))
             
@@ -210,56 +224,64 @@ def get_fdrcurvs(species):
     return curvs
         
 #%%
-curvs = defaultdict(list)
-for species in species_list:
-    sc = get_fdrcurvs(species)
-    for method, curv in sc.items():
-        curvs[method].append(curv)
-
-#%%
-fig = plt.figure(figsize=[7,5], dpi=200)
-ax = plt.axes()
-legends = []
-lines = []
-for method, mat in curvs.items():
-    print(method)
-    mat = np.array(mat)
-    print(mat.shape)
     
-    mcurv = mat.mean(0)
-    curvstd = mat.std(0)
+def plot_avg_true_fdr():
+    curvs = defaultdict(list)
+    for species in species_list:
+        sc = get_fdrcurvs(species)
+        for method, curv in sc.items():
+            curvs[method].append(curv)
     
-    ucurv = mcurv + curvstd
-    dcurv = mcurv - curvstd
-
-    mc = plt.plot(xgrid, mcurv)
+    #%%
+    fig = plt.figure(figsize=[7,5], dpi=200)
+    ax = plt.axes()
+    legends = []
+    lines = []
+    for method, mat in curvs.items():
+        print(method)
+        mat = np.array(mat)
+        print(mat.shape)
+        
+        mcurv = mat.mean(0)
+        curvstd = mat.std(0)
+        
+        ucurv = mcurv + curvstd
+        dcurv = mcurv - curvstd
+    
+        mc = plt.plot(xgrid, mcurv)
+        lines.append(mc[0])
+        plt.plot(xgrid, ucurv, color=mc[0].get_c(), linewidth=1, alpha=.4)
+        plt.plot(xgrid, dcurv, color=mc[0].get_c(), linewidth=1, alpha=.4)
+        plt.fill_between(xgrid, dcurv, ucurv, alpha=.2)
+        
+        legends.append(method)
+    
+    mc = plt.plot([0,0.2], [0,0.2], linewidth=1, color='darkred')
     lines.append(mc[0])
-    plt.plot(xgrid, ucurv, color=mc[0].get_c(), linewidth=1, alpha=.4)
-    plt.plot(xgrid, dcurv, color=mc[0].get_c(), linewidth=1, alpha=.4)
-    plt.fill_between(xgrid, dcurv, ucurv, alpha=.2)
+    legends.append('ground truth')
     
-    legends.append(method)
-
-mc = plt.plot([0,0.2], [0,0.2], linewidth=1, color='darkred')
-lines.append(mc[0])
-legends.append('ground truth')
-
-ax.set_xlim(1e-5, 0.2)
-ax.set_ylim(1e-5, 0.2)
-
-if log_scale:
-    plt.xscale('log')
-    plt.yscale('log')
-
-ax.set_aspect('equal')
-ax.set_xlabel('Estimated FDR')
-ax.set_ylabel('True FDR')
-plt.legend(lines, legends)
-
-if log_scale:
-    plt.savefig('test_search/est_results_nist/fdrcmp_log.png')
-else:
-    plt.savefig('test_search/est_results_nist/fdrcmp.png')
+    ax.set_xlim(1e-3, 0.2)
+    ax.set_ylim(1e-3, 0.2)
+    
+    if log_scale:
+        plt.xscale('log')
+        plt.yscale('log')
+    
+    ax.set_aspect('equal')
+    ax.set_xlabel('Estimated FDR')
+    ax.set_ylabel('True FDR')
+    plt.legend(lines, legends)
+    
+    if log_scale:
+        plt.savefig('test_search/est_results_nist/fdrcmp_log.png')
+    else:
+        plt.savefig('test_search/est_results_nist/fdrcmp.png')
 
 
 #%%
+log_scale = False
+plot_avg_true_fdr()
+
+log_scale = True
+plot_avg_true_fdr()
+
