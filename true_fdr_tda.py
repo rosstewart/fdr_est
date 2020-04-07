@@ -135,7 +135,7 @@ def match_peptide(p_nist, p_msgf):
             return True
         if j >= len(p_msgf):
             return False
-        if p_msgf[j] in '+.0123456789':
+        if p_msgf[j] in '-+.0123456789':
 #            print(p_msgf[j], j, len(p_msgf))
             j += 1
             continue

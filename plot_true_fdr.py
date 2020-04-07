@@ -217,7 +217,7 @@ def plot_fdrcurv(species):
 
         ax.set_aspect('equal')
         ax.set_xlabel('Estimated FDR')
-        ax.set_ylabel('True FDR')
+        ax.set_ylabel('Percent of mismatches v.s. NIST')
         
         ax.set_xlim(1e-3, 0.1)
         ax.set_ylim(1e-3, 0.1)

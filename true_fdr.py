@@ -11,6 +11,7 @@ import tarfile
 
 import csv
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
 import json
@@ -218,6 +219,8 @@ def get_truefdr(species):
         return peps
     
     peps = get_peps(species)
+    #peps = pd.read_csv(data_dir+species+'_peps.csv', delimiter='\t')
+    #peps = peps['Pep'].values
     
     reps = []
     mismatches = []
@@ -227,11 +230,15 @@ def get_truefdr(species):
     def get_truefdr(species):
         f = open('test_search/nist/'+species+'_nod.tsv')
         psmcsv = csv.DictReader(f, delimiter='\t')
+
+        pepfound = pd.read_csv(species_dir+'matches.csv', names=['pepfound', 'protfound', 'protid'])
+        pepfound = pepfound['pepfound'].values
         
 #        psms = get_first_psms(psmcsv)
         psmlists = get_psm_lists(psmcsv)
         matches = []
         samescores = []
+        pepindb = 0
 #        i = 0
         for i, (spec, psmlist) in enumerate(psmlists):
             pep, score = psmlist[0]
@@ -239,8 +246,11 @@ def get_truefdr(species):
             m = match_peptide_list(peps[spec], psmlist)
             nrep = len(rep)
             if skip_nomatch and m == -1:
-                nomatch.append([i])
-                continue
+                if not pepfound[spec]:
+                    nomatch.append([i])
+                    continue
+                else:
+                    pepindb += 1
             if m == 0:
                 matches.append((True, score))
             else:
@@ -255,6 +265,8 @@ def get_truefdr(species):
                 
             #    print(match_peptide(peps[spec], pep))
 #            i += 1
+        
+        print('pep in db but not in match:', pepindb)
             
         n = 0
         fc = 0
@@ -340,4 +352,7 @@ def get_truefdr(species):
 for species in species_list:
     print(species)
     get_truefdr(species)
+
+
+
 

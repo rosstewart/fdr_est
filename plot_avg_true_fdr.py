@@ -30,7 +30,7 @@ from collections import defaultdict
 species_list = [
         'c_elegans',
 #        'drosophila',
-        'e_coli',
+#        'e_coli',
         'human',
         'mouse',
         'yeast',
@@ -269,7 +269,7 @@ def plot_avg_true_fdr():
     
     ax.set_aspect('equal')
     ax.set_xlabel('Estimated FDR')
-    ax.set_ylabel('True FDR')
+    ax.set_ylabel('Percent of mismatches v.s. NIST')
     plt.legend(lines, legends)
     
     if log_scale:
