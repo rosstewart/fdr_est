@@ -10,20 +10,27 @@ import tarfile
 
 #%%
 
-species = 'human'
+#species = 'human'
 #species = 'mouse'
 #species = 'drosophila'
 #species = 'e_coli'
 #species = 'c_elegans'
 #species = 'yeast'
 
+species_list = [
+        'human_hcd',
+        'mouse_hcd',
+    ]
+
+libmap = {
+        'human_hcd': 'human_hcd_selected.msp.tar.gz',
+        'mouse_hcd': 'cptac2_mouse_hcd_selected.msp.tar.gz',
+    }
+
+data_dir = 'test_search/nist_hcd/'
 
 #mspfile = open('nist/human_consensus_final_true_lib.msp')
-mspfile = tarfile.open('nist/'+species+'_consensus_final_true_lib.tar.gz', 'r|gz')
-tarinfo = mspfile.next()
-mspfile = mspfile.extractfile(tarinfo)
-
-msplist = (l.decode("utf-8").rstrip() for l in mspfile)
+#mspfile = tarfile.open('nist/'+species+'_consensus_final_true_lib.tar.gz', 'r|gz')
 
 #%%
 def split_comments(comment):
@@ -31,7 +38,10 @@ def split_comments(comment):
     quote = False
     for c in comment:
         if c == ' ' and not quote:
-            yield ret
+            if '=' in ret:
+                yield ret
+            else:
+                print(ret)
             ret = ''
         elif c == '"':
             quote = not quote
@@ -90,15 +100,25 @@ def write_mgf(f, item):
     
     f.write('END IONS\n\n')
 
-mgffile = open('nist/'+species+'.mgf', 'w')
-n = 0
-for item in parse_msp(msplist):
-    if not item:
-        continue
-    write_mgf(mgffile, item)
-    n += 1
-    print(n)
+for species in species_list:
+    mspfile = 'test_search/nist_hcd/'+libmap[species]
+    mspfile = tarfile.open(mspfile, 'r|gz')
+    tarinfo = mspfile.next()
+    mspfile = mspfile.extractfile(tarinfo)
+
+    msplist = (l.decode("utf-8").rstrip() for l in mspfile)
+    #for i in range(10):
+    #    print(next(msplist))
+
+    mgffile = open(data_dir+species+'.mgf', 'w')
+    n = 0
+    for item in parse_msp(msplist):
+        if not item:
+            continue
+        write_mgf(mgffile, item)
+        n += 1
+        print(n)
 
 
-mgffile.close()    
+    mgffile.close()    
 

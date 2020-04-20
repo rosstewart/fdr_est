@@ -87,7 +87,9 @@ elif data_source == 'NIST':
             #'e_coli',
             #'human',
             #'mouse',
-            'yeast',
+            #'yeast',
+            'human_hcd',
+            #'mouse_hcd',
         ]
     result_dir = 'test_search/est_results_nist/'
     data_source = 'NIST'
@@ -192,6 +194,9 @@ def extract_mat(species):
         smat.append(sslist)
         i += 1
 
+    print(species, i)
+    return
+
     slen = np.array(slen)
     
     mat = np.array(mat)
@@ -238,6 +243,8 @@ def extract_rep_mat(species):
         
         matches[spec] = slist
         i += 1
+    print(species, i)
+    #return
 
     
 #    mat = np.array(mat)

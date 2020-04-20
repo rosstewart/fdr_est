@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for matfile in test_search/matdata_nist/*.mat
+for matfile in test_search/matdata_nist/human_hcd_data.mat
 do
 	matfile=$(basename $matfile)
 	sp=${matfile/_data.mat/}

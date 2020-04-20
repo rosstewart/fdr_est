@@ -1,3 +1,4 @@
+disp(['using 4 inits'])
 
 best_model = [];
 best_init = [];
@@ -5,6 +6,7 @@ best_ll = -inf;
 ll_list = [];
 for sl1 = [1,-1]
     for sl2 = [1,-1]
+		sl1, sl2
         [alpha, beta, u_c, sigma_c, lambda_c, u_i, sigma_i, lambda_i] = EM2_1(mat',sl1,sl2);
         ll = func_ll(mat', alpha, beta, u_c, sigma_c, lambda_c, u_i, sigma_i, lambda_i);
         ll_list = [ll_list, ll];

@@ -1,8 +1,9 @@
 method='_1s2c'
-[alpha, u_c, sigma_c, lambda_c, u_i, sigma_i, lambda_i] = EM2_1(omat',1,1)
+species_folder = [results_folder,species]
+% [alpha, u_c, sigma_c, lambda_c, u_i, sigma_i, lambda_i] = EM2_1(omat',1,1)
+em_1s2c_with_4init
 plot_dist
 
-species_folder = [results_folder,species];
 if ~exist('bootstrap_num')
     param_folder = [species_folder,'/params/'];
     paramfile = [param_folder,method,'.mat'];
