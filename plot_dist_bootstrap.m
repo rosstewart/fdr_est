@@ -62,7 +62,7 @@ legend({'dist\_correct'; 'dist\_incorrect'; 'mixture'; 'hist\_first'});
 % end
 
 % results_folder = 'test_search/fragger_results/';
-results_folder = 'test_search/est_results/';
+% results_folder = 'test_search/est_results/';
 
 species_folder = [results_folder,species];
 distplot_dir = [species_folder,'/distplot/',method,'/bootstrap/'];

@@ -2,7 +2,7 @@ method='_1s2cg'
 [alpha, u_c, sigma_c, u_i, sigma_i] = EM2_1g(omat')
 plot_dist_gumbel
 
-species_folder = ['test_search/est_results/',species]
+species_folder = [results_folder,species]
 param_folder = [species_folder,'/params/'];
 if ~exist(param_folder)
     mkdir(param_folder)

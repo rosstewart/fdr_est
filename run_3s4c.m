@@ -2,7 +2,7 @@ method='_3s4c'
 em_with_16init
 plot_dist
 
-species_folder = ['test_search/est_results/',species];
+species_folder = [results_folder,species]
 param_folder = [species_folder,'/params/'];
 if ~exist(param_folder)
     mkdir(param_folder)

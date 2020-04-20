@@ -66,7 +66,6 @@ end
 % legend({'dist\_correct'; 'dist\_incorrect'; 'mixture'; 'mixture2'; 'mixture3'; 'hist\_first'; 'hist\_second'});
 
 hold off;
-% saveas(gcf,['test_search/distplot/',species,method,'.png'])
 
 % figure;
 % hold on;
