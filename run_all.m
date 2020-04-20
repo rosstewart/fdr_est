@@ -1,5 +1,5 @@
-run_1s2c
-run_1s2ca
+% run_1s2c
+% run_1s2ca
 % % run_2s2ci
 run_2s3ci
 % run_2s3ct

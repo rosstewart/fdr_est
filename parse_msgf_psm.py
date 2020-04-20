@@ -33,26 +33,29 @@ shantanu_m_l = ['SNMax1',]
 #
 #method_list += shantanu_m_l
 
+data_source = 'PRIDE'
 #data_source = 'HeLa'
-data_source = 'NIST'
+#data_source = 'NIST'
 
 if data_source == 'PRIDE':
     species_list = [
-            'A.thaliana',
-#            'C.elegans',
-            'D.melanogaster',
-            'E.coli',
+#            'A.thaliana',
+##            'C.elegans',
+#            'D.melanogaster',
+#            'E.coli',
             'H.sapiens2',
-            'H.sapiens3',
-            'M.musculus',
-            'M.musculus2',
-            'M.musculus3',
-#            'S.cerevisiae',
-            'S.cerevisiae2',
-            'S.cerevisiae3',
+#            'H.sapiens3',
+#            'M.musculus',
+#            'M.musculus2',
+#            'M.musculus3',
+##            'S.cerevisiae',
+#            'S.cerevisiae2',
+#            'S.cerevisiae3',
         ]
     result_dir = 'test_search/est_results/'
     data_source = 'PRIDE'
+    psm_dir = 'test_search/pride/'
+    data_dir = 'test_search/matdata_pride/'
 
 elif data_source == 'HeLa':
     species_list = [
@@ -74,7 +77,7 @@ elif data_source == 'HeLa':
         ]
     result_dir = 'test_search/est_results/'
     data_source = ''
-    psm_dir = 'test_search/pride/'
+    psm_dir = 'test_search/hela/'
     data_dir = 'test_search/matdata_hela/'
 
 elif data_source == 'NIST':

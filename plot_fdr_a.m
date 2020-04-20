@@ -19,7 +19,7 @@ figure();
 plot(curv(:,1), curv(:,2));
 
 % csvwrite('twomix.csv', curv);
-species_folder = ['test_search/est_results/',species];
+species_folder = [results_folder,species];
 fdr_folder = [species_folder,'/fdr/'];
 if exist('bootstrap_num')
     fdr_folder = [fdr_folder,method,'/bootstrap/'];

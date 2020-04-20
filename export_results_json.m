@@ -47,6 +47,7 @@ for me_j = 1:n_m
     obj.pdfC = yc;
     obj.cdfTrue = h1emp;
     obj.cdf = h1;
+    size(obj.cdf)
     obj.fdr = fdr_curv;
     obj.t1p = thres;
     obj.t01p = thres01;

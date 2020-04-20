@@ -1,13 +1,13 @@
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 \begin{subfigure}{!subfigure_width\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{figures/nist/{!species}/distplot/!method.png}
+  \includegraphics[width=\linewidth]{!figure_dir{!species}/distplot/!method.png}
 \end{subfigure}%
 \begin{subfigure}{!subfigure_width\textwidth}
   \centering
-  \includegraphics[width=\linewidth]{figures/nist/{!species}/fitcurv/!method.png}
+  \includegraphics[width=\linewidth]{!figure_dir{!species}/fitcurv/!method.png}
 \end{subfigure}
 \caption{D=!species !num_SS, !num_DD, Marginal, !model. $\tau_{\text{TRUE}}=!thres_true$, $\tau = !thres2$, $\tau_{\text{TDA}}=!thres$, $\tau_{\text{TDA PIT}}=!thres_cor$, !params, !ll, !sdcdf, !mean.}
 \end{figure}

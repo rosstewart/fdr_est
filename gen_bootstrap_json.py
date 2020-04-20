@@ -19,8 +19,8 @@ import os
 
 #%%
 method_list = [
-        '_1s2c',
         '_1s2ca',
+        '_1s2c',
 #        '_2s2ci',
         '_2s3ci',
 #        '_2s3ct',
@@ -28,24 +28,24 @@ method_list = [
     ]
 
 species_list = [
-#        'A.thaliana',
-##        'C.elegans',
-#        'D.melanogaster',
-#        'E.coli',
-#        'H.sapiens2',
-#        'H.sapiens3',
-#        'M.musculus',
-#        'M.musculus2',
-#        'M.musculus3',
-##        'S.cerevisiae',
-#        'S.cerevisiae2',
-#        'S.cerevisiae3',
-#        
-        'HeLa01ng',
-        'HeLa1ng',
-        'HeLa10ng',
-        'HeLa50ng',
-        'HeLa100ng'
+        'A.thaliana',
+#        'C.elegans',
+        'D.melanogaster',
+        'E.coli',
+        'H.sapiens2',
+        'H.sapiens3',
+        'M.musculus',
+        'M.musculus2',
+        'M.musculus3',
+#        'S.cerevisiae',
+        'S.cerevisiae2',
+        'S.cerevisiae3',
+        
+#        'HeLa01ng',
+#        'HeLa1ng',
+#        'HeLa10ng',
+#        'HeLa50ng',
+#        'HeLa100ng',
     ]
 
 #species_list = [
@@ -68,7 +68,7 @@ results_dir = 'test_search/est_results_full/'
 
 #%%
 
-nboots = 50
+nboots = 200
 def boxplot_thres(species, method):
     thres_list = []
     for bootstrap_num in range(nboots):
@@ -76,24 +76,30 @@ def boxplot_thres(species, method):
         fdr_dir = species_dir + 'fdr/'
         bootstrap_dir = fdr_dir + method+'/bootstrap/'
         fdr_file = bootstrap_dir + str(bootstrap_num+1)+'.csv'
-        print(fdr_file)
+#        print(fdr_file)
         
         fdr_est = np.genfromtxt(fdr_file, delimiter=',')
         if len(fdr_est.shape) == 1:
             thres_list.append(max(thres_list))
             continue
         
+#        plt.plot(fdr_est[:,0])
+#        print(fdr_est.shape)
+        
         eval_fdr_map = {}
         
 #        print(bootstrap_num, fdr_file, fdr_est.shape)
+        thres2 = 0
         for fdr,n,s in fdr_est:
             eval_fdr_map[s] = fdr
         for fdr,n,s in fdr_est:
-            if fdr > 0.01:
-                break
             nmatches2 = n
             thres2 = s
+#            print(s)
+            if fdr > 0.01:
+                break
         thres_list.append(thres2)
+    plt.plot(thres_list)
     return thres_list
 
 

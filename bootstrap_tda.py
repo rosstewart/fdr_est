@@ -28,11 +28,11 @@ species_list = [
         'S.cerevisiae2',
         'S.cerevisiae3',
         
-        'HeLa01ng_2',
-        'HeLa1ng',
-        'HeLa10ng',
-        'HeLa50ng',
-        'HeLa100ng'
+#        'HeLa01ng',
+#        'HeLa1ng',
+#        'HeLa10ng',
+#        'HeLa50ng',
+#        'HeLa100ng'
     ]
 
 #species_list = [
@@ -136,7 +136,7 @@ def bootstrapping(species, nboots, boot_ratio):
 #%%
 res = []
 for species in species_list:
-    thres_list = bootstrapping(species, 100, 0.1)
+    thres_list = bootstrapping(species, 200, 0.1)
     obj = {'ds': species, 'algo': 'TDA', 't1p': thres_list}
 #    thres_mat.append(thres_list)
 #    plt.legend(species_list)

@@ -148,8 +148,8 @@ method_map = {
 log_scale = False
 #log_scale = True
 
-skip_nomatch = True
-#skip_nomatch = False
+#skip_nomatch = True
+skip_nomatch = False
 
 def plot_fdrcurv(species):
     species_dir = res_dir + species + '/'
@@ -213,20 +213,20 @@ def plot_fdrcurv(species):
         ax.plot(est_fdr, true_fdr_tda, linewidth=1)
         legends.append('tda')
         
-        ax.plot([0,max_fdr], [0,max_fdr], linewidth=1, color='darkred')
+        ax.plot([0,max_fdr], [0,max_fdr], linewidth=1, color='darkred',linestyle='dashed')
 
         ax.set_aspect('equal')
         ax.set_xlabel('Estimated FDR')
-        ax.set_ylabel('Percent of mismatches v.s. NIST')
+        ax.set_ylabel('Percent of mismatches vs. NIST')
         
         ax.set_xlim(1e-3, 0.1)
         ax.set_ylim(1e-3, 0.1)
-            
+        
         if log_scale:
             plt.xscale('log')
             plt.yscale('log')
         
-        legends.append('ground truth')
+#        legends.append('ground truth')
         ax.legend(legends)
         
         #curv_dir = species_dir + 'fdrcmp/'

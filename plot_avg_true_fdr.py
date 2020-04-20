@@ -146,6 +146,15 @@ method_map = {
         'SNMax2': 'SNMax2',
     }
 
+algo_name_map = {
+        'tda': 'TDA',
+        '1S2D gamma & gaussian': 'GG',
+        '1S2D skew normal': '1SMix',
+        '2S3D skew normal': '2SMix',
+        'SNMax1': 'SNMax1',
+        'SNMax2': 'SNMax2',
+    }
+
 #log_scale = False
 log_scale = True
 
@@ -216,6 +225,7 @@ def get_fdrcurvs(species):
         tdares = tdajson[species]
         est_fdr = tdares['fdr']
         print(len(est_fdr))
+        print(species, max(est_fdr))
         
         curvs['tda'] = np.interp(xgrid, est_fdr, true_fdr_tda)
     
@@ -233,7 +243,7 @@ def plot_avg_true_fdr():
             curvs[method].append(curv)
     
     #%%
-    fig = plt.figure(figsize=[7,5], dpi=200)
+    fig = plt.figure(figsize=[3,3])
     ax = plt.axes()
     legends = []
     lines = []
@@ -254,14 +264,14 @@ def plot_avg_true_fdr():
         plt.plot(xgrid, dcurv, color=mc[0].get_c(), linewidth=1, alpha=.4)
         plt.fill_between(xgrid, dcurv, ucurv, alpha=.2)
         
-        legends.append(method)
+        legends.append(algo_name_map[method])
     
-    mc = plt.plot([0,0.2], [0,0.2], linewidth=1, color='darkred')
-    lines.append(mc[0])
-    legends.append('ground truth')
+    mc = plt.plot([0,0.2], [0,0.2], linewidth=1, color='darkred',linestyle='dashed')
+#    lines.append(mc[0])
+#    legends.append('ground truth')
     
-    ax.set_xlim(1e-3, 0.2)
-    ax.set_ylim(1e-3, 0.2)
+    ax.set_xlim(1e-3, 0.1)
+    ax.set_ylim(1e-3, 0.1)
     
     if log_scale:
         plt.xscale('log')
@@ -269,13 +279,17 @@ def plot_avg_true_fdr():
     
     ax.set_aspect('equal')
     ax.set_xlabel('Estimated FDR')
-    ax.set_ylabel('Percent of mismatches v.s. NIST')
+    ax.set_ylabel('Percent of mismatches vs. NIST')
     plt.legend(lines, legends)
     
+    plt.tight_layout()
+    
     if log_scale:
-        plt.savefig('test_search/est_results_nist/fdrcmp_log.png')
+        plt.savefig('test_search/est_results_nist/fdrcmp_log.png', dpi=320)
+        plt.savefig('test_search/est_results_nist/fdrcmp_log.pdf', dpi=320)
     else:
-        plt.savefig('test_search/est_results_nist/fdrcmp.png')
+        plt.savefig('test_search/est_results_nist/fdrcmp.png', dpi=320)
+        plt.savefig('test_search/est_results_nist/fdrcmp.pdf', dpi=320)
 
 
 #%%

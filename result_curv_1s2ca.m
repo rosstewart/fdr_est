@@ -1,7 +1,6 @@
 
 s1 = sort(omat(:,1));
 m = size(s1,1);
-
 % pdf
 
 yc = alpha*normpdf(s1, u_c, sigma_c);

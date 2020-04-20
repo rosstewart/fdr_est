@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Mar 28 23:37:43 2020
+Created on Wed Apr  8 10:34:19 2020
 
 @author: yisupeng
 """
+
 
 import csv
 import matplotlib.pyplot as plt
@@ -56,60 +57,15 @@ elif data_source == 'HeLa':
 elif data_source == 'NIST':
     species_list = [
             'c_elegans',
-#            'drosophila',
-#            'e_coli',
+            'drosophila',
+            'e_coli',
             'human',
-            'mouse',
-            'yeast',
+            'mouse'
         ]
     result_dir = 'test_search/est_results_nist/'
     data_source = 'NIST'
 
-
 #%%
-legends = []
-def plot_repmis(species):
-    species_dir = result_dir + species + '/'
-    
-    repmis_file = species_dir + 'repmis.csv'
-    repmis_file = open(repmis_file)
-    repmis_csv = csv.reader(repmis_file)
-    
-    pl = []
-    c = 0
-    n = 0
-    for m, s in repmis_csv:
-        m = int(m)
-        s = float(s)
-        if m == 0:
-            c += 1
-#        if m != -1:
-        if m == 0 or m == 1:
-            n += 1
-        p = (n - c) / n
-#        print(p)
-        pl.append((s, p))
-    
-    pl = np.array(pl)
-
-    plt.plot(pl[:,0], pl[:,1])
-    legends.append(species.replace('_', '.').capitalize())
-
-#%%
-fig = plt.figure(figsize=[7,5])
-for species in species_list:
-    plot_repmis(species)
-#    break
-plt.xlabel('-log(EValue)')
-plt.ylabel('Error rate')
-plt.legend(legends)
-
-
-
-
-
-
-
 
 
 

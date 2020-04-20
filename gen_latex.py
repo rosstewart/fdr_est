@@ -11,52 +11,70 @@ import scipy.io as sio
 latex_output = open('latex_snippet.txt', 'w')
 
 #%%
+
+#data_source = 'PRIDE'
+data_source = 'HeLa'
+#data_source = 'NIST'
+
+if data_source == 'PRIDE':
+    species_list = [
+            'A.thaliana',
+#            'C.elegans',
+            'D.melanogaster',
+            'E.coli',
+            'H.sapiens2',
+            'H.sapiens3',
+            'M.musculus',
+            'M.musculus2',
+            'M.musculus3',
+#            'S.cerevisiae',
+            'S.cerevisiae2',
+            'S.cerevisiae3',
+        ]
+    result_dir = 'test_search/est_results_pride/'
+    data_source = 'PRIDE'
+    figure_dir = 'figures/'
+
+elif data_source == 'HeLa':
+    species_list = [
+            'HeLa01ng',
+            'HeLa01ng.2',
+            'HeLa01ng.3',
+            'HeLa1ng',
+            'HeLa1ng.2',
+            'HeLa1ng.3',
+            'HeLa10ng',
+            'HeLa10ng.2',
+            'HeLa10ng.3',
+            'HeLa50ng',
+            'HeLa50ng.2',
+            'HeLa50ng.3',
+            'HeLa100ng',
+            'HeLa100ng.2',
+            'HeLa100ng.3',
+        ]
+    result_dir = 'test_search/est_results_hela/'
+    data_source = ''
+    figure_dir = 'figures/'
+
+elif data_source == 'NIST':
+    species_list = [
+            'c_elegans',
+            'drosophila',
+            'e_coli',
+            'human',
+            'mouse',
+            'yeast',
+        ]
+    result_dir = 'test_search/est_results_nist/'
+    data_source = 'NIST'
+    figure_dir = 'figures/nist/'
+
 method_list = [
-        '_1s2c',
         '_1s2ca',
-#        '_2s2ci',
+        '_1s2c',
         '_2s3ci',
-#        '_2s3ct',
-#        '_3s4ci',
     ]
-
-shantanu_m_l = ['SNMax1',]
-
-method_list += shantanu_m_l
-
-#species_list = [
-#        'A.thaliana',
-##        'C.elegans',
-#        'D.melanogaster',
-#        'E.coli',
-#        'H.sapiens2',
-#        'H.sapiens3',
-#        'M.musculus',
-#        'M.musculus2',
-#        'M.musculus3',
-##        'S.cerevisiae',
-#        'S.cerevisiae2',
-#        'S.cerevisiae3',
-#    ]
-#
-species_list = [
-        'HeLa01ng',
-        'HeLa1ng',
-        'HeLa10ng',
-        'HeLa50ng',
-        'HeLa100ng'
-    ]
-
-#species_list = [
-#        'c_elegans',
-#        'drosophila',
-#        'e_coli',
-#        'human',
-#        'mouse'
-#    ]
-
-#result_dir = 'test_search/est_results_nist/'
-result_dir = 'test_search/est_results/'
 
 #%%
 subfigure_width = 0.5
@@ -71,12 +89,13 @@ def list_params(params):
     return ", ".join(["$%s=%.2f$"%(k,v) for k,v in params.items()])
 def gen_latex(species, method):
     global num_S, num_D, model, thres, thres_cor, thres2, params, ll, mean, sdcdf
+    global thres_true
     num_S = method[1]
     num_D = method[3]
     type_D = 's'
     if len(method) > 5 and method[5] != 'i':
         type_D = method[5]
-    print(method, num_S, num_D, type_D)
+#    print(method, num_S, num_D, type_D)
     if type_D == 's':
         model = 'skew normal'
     elif type_D == 't':
@@ -97,7 +116,9 @@ def gen_latex(species, method):
             v = v.replace('_', '.')
         content = content.replace('!'+k, v)
     
+    replace_var('figure_dir')
     replace_var('subfigure_width')
+#    replace_var('data_source')
     replace_var('species')
     replace_var('method')
     replace_var('num_S')
@@ -122,7 +143,7 @@ def gen_latex(species, method):
             if p == 'u':
                 p = '\mu'
             params['%s_{%s}'%(p, s.upper())] = v
-        print(method, species)
+#        print(method, species)
         put_param('u', 'c')
         if type_D in ['s', 't']:
             put_param('u', 'i')
@@ -134,7 +155,7 @@ def gen_latex(species, method):
         if int(num_D) > 3:
             put_param('u', 'i3')
         params = list_params(params)
-        print(params)
+#        print(params)
         
         replace_var('params')
     
@@ -165,12 +186,24 @@ def gen_latex(species, method):
             mean.append('$%s=%.4f$'%(k,v[0,0]))
     mean = ', '.join(mean)
     
-#    thres_true = open(result_dir+species+'/true_thres.txt')
-#    thres_true = thres_true.read().rstrip()
+    def get_val(s):
+        return s.strip('$').split('=')[1]
+    if method == '_1s2ca':
+        print(thres, end='\t')
+    print(get_val(sdcdf), get_val(ll.split(', ')[0]), thres2, sep='\t', end='\t')
+    if method == '_2s3ci':
+        print(get_val(ll.split(', ')[1]), end='')
+    
     
     replace_var('thres2')
     replace_var('thres_cor')
-#    replace_var('thres_true')
+    if data_source == 'NIST':
+        thres_true = open(result_dir+species+'/true_thres.txt')
+        thres_true = float(thres_true.read().rstrip())
+        thres_true = "%.2f"%thres_true
+        replace_var('thres_true')
+    else:
+        content = content.replace('$\\tau_{\\text{TRUE}}=!thres_true$, ', '')
     replace_var('thres')
     replace_var('ll')
     replace_var('mean')
@@ -182,7 +215,9 @@ def gen_latex(species, method):
 
 #%%
 for species in species_list:
+    print(species, end='\t')
     for method in method_list:
         gen_latex(species, method)
+    print('')
     latex_output.write("\n%%===================================================================\n")
 latex_output.close()

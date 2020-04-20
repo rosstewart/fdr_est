@@ -1,11 +1,11 @@
 clear
 
-% list_species = {
+list_species = {
 % 'A.thaliana'
 % % 'C.elegans'
 % 'D.melanogaster'
 % 'E.coli'
-% 'H.sapiens2'
+'H.sapiens2'
 % 'H.sapiens3'
 % 'M.musculus'
 % 'M.musculus2'
@@ -13,7 +13,10 @@ clear
 % % 'S.cerevisiae'
 % 'S.cerevisiae2'
 % 'S.cerevisiae3'
-% }
+}
+data_dir = 'test_search/matdata_pride/';
+results_folder = 'test_search/est_results_pride/';
+
 
 % species
 
@@ -42,18 +45,18 @@ list_methods = {
 % plotcdf = true;
 % plotthres = false;
 
-list_species = {
-    'HeLa01ng'
-    'HeLa1ng'
-    'HeLa10ng'
-    'HeLa50ng'
-    'HeLa100ng'
-};
-data_dir = 'test_search/matdata_hela/';
-results_folder = 'test_search/est_results_hela/';
-xlim_high = 45;
-plotcdf = false;
-plotthres = true;
+% list_species = {
+%     'HeLa01ng'
+%     'HeLa1ng'
+%     'HeLa10ng'
+%     'HeLa50ng'
+%     'HeLa100ng'
+% };
+% data_dir = 'test_search/matdata_hela/';
+% results_folder = 'test_search/est_results_hela/';
+% xlim_high = 45;
+% plotcdf = true;
+% plotthres = true;
 
 figw = 240;
 figh = 120;
@@ -109,9 +112,9 @@ for i = 1:n
         end
 
         if strcmp(method, '_1s2ca')
-            plot_dist_gamma
+            plot_dist_gamma_old
         else
-            plot_dist
+            plot_dist_old
         end
 
     end

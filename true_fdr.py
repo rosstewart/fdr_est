@@ -132,10 +132,10 @@ def get_psm_lists(ss):
 def match_aminoacid(a, b):
     if a == b:
         return True
-    if a == 'I' and b == 'L':
-        return True
-    if a == 'L' and b == 'I':
-        return True
+#    if a == 'I' and b == 'L':
+#        return True
+#    if a == 'L' and b == 'I':
+#        return True
 #    if a == 'K' and b == 'Q':
 #        return True
 #    if a == 'Q' and b == 'K':
@@ -294,26 +294,14 @@ def get_truefdr(species):
         qvals[qstart:n] = qval
         curv.append((qval, n, score))
         curv = np.array(curv, dtype=float)
-        curv[:,2] = -np.log(curv[:,2])
+#        curv[:,2] = -np.log(curv[:,2])
         true_fdr = np.array(qvals)
         
+#        return true_fdr
     
-        true_thres = 0
-        for fdr,n,s in curv:
-            if fdr > 0.01:
-                break
-        #    nmatches = n
-            true_thres = s
-        
-        ttfile = open(species_dir + 'true_thres.txt', 'w')
-        ttfile.write("%f\n"%true_thres)
-        ttfile.close()
-        
-        return true_fdr
+#    true_fdr = get_truefdr(species)
     
-    true_fdr = get_truefdr(species)
-    
-    def get_fdr_correction():
+#    def get_fdr_correction():
         fdr_correction = []
         n = 0
         nwrong = 0
@@ -326,8 +314,24 @@ def get_truefdr(species):
             fdr_correction.append(pwrong)
         fdr_correction = np.array(fdr_correction)
         np.savetxt(species_dir + 'fdr_correction.csv', fdr_correction)
-    get_fdr_correction()
-            
+#        return fdr_correction
+#    fdr_correction = get_fdr_correction()
+    
+#    def get_true_thres():
+        true_thres = 0
+        for i, (fdr, n, s) in enumerate(curv):
+            true_thres = s
+            if fdr + fdr_correction[i] >= 0.01:
+                break
+        #    nmatches = n
+        
+        ttfile = open(species_dir + 'true_thres.txt', 'w')
+        ttfile.write("%f\n"%true_thres)
+        ttfile.close()
+        
+        return true_fdr
+#    get_true_thres()
+    true_fdr = get_truefdr(species)
     
     repcsv = csv.writer(open(species_dir + 'rep.csv', 'w'))
     repcsv.writerows(reps)

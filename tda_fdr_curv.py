@@ -10,55 +10,78 @@ import json
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 #%%
 
-#species_list = [
-#        'A.thaliana',
-##        'C.elegans',
-#        'D.melanogaster',
-#        'E.coli',
-#        'H.sapiens2',
-#        'H.sapiens3',
-#        'M.musculus',
-#        'M.musculus2',
-#        'M.musculus3',
-##        'S.cerevisiae',
-#        'S.cerevisiae2',
-#        'S.cerevisiae3',
-#    ]
+#data_source = 'PRIDE'
+data_source = 'HeLa'
+#data_source = 'NIST'
 
-#species_list = [
-#        'HeLa01ng',
-#        'HeLa1ng',
-#        'HeLa10ng',
-#        'HeLa50ng',
-#        'HeLa100ng',
-#        'HeLa01ng.2',
-#        'HeLa1ng.2',
-#        'HeLa10ng.2',
-#        'HeLa50ng.2',
-#        'HeLa100ng.2',
-#        'HeLa01ng.3',
-#        'HeLa1ng.3',
-#        'HeLa10ng.3',
-#        'HeLa50ng.3',
-#        'HeLa100ng.3',
-#    ]
+if data_source == 'PRIDE':
+    species_list = [
+            'A.thaliana',
+#            'C.elegans',
+            'D.melanogaster',
+            'E.coli',
+            'H.sapiens2',
+            'H.sapiens3',
+            'M.musculus',
+            'M.musculus2',
+            'M.musculus3',
+#            'S.cerevisiae',
+            'S.cerevisiae2',
+            'S.cerevisiae3',
+        ]
+    result_dir = 'test_search/est_results_pride/'
+    data_source = 'PRIDE'
+    figure_dir = 'figures/'
 
-species_list = [
-        'c_elegans',
-        'drosophila',
-        'e_coli',
-        'human',
-        'mouse',
-        'yeast',
+elif data_source == 'HeLa':
+    species_list = [
+            'HeLa01ng',
+            'HeLa01ng.2',
+            'HeLa01ng.3',
+            'HeLa1ng',
+            'HeLa1ng.2',
+            'HeLa1ng.3',
+            'HeLa10ng',
+            'HeLa10ng.2',
+            'HeLa10ng.3',
+            'HeLa50ng',
+            'HeLa50ng.2',
+            'HeLa50ng.3',
+            'HeLa100ng',
+            'HeLa100ng.2',
+            'HeLa100ng.3',
+        ]
+    psm_dir = 'test_search/pride/'
+    result_dir = 'test_search/est_results_hela/'
+    data_source = ''
+
+elif data_source == 'NIST':
+    species_list = [
+            'c_elegans',
+            'drosophila',
+            'e_coli',
+            'human',
+            'mouse',
+            'yeast',
+        ]
+    result_dir = 'test_search/est_results_nist/'
+    data_source = 'NIST'
+
+method_list = [
+        '_1s2ca',
+        '_1s2c',
+        '_2s3ci',
     ]
 
 #psm_dir = 'test_search/pride/'
-psm_dir = 'test_search/nist/'
+#result_dir = 'test_search/est_results_pride/'
 
-result_dir = 'test_search/est_results_nist/'
+#psm_dir = 'test_search/nist/'
+#result_dir = 'test_search/est_results_nist/'
 
 #%%
 def get_tda_fdr(species):
@@ -114,4 +137,7 @@ for species in species_list:
 #    break
 
 #%%
+json_dir = result_dir+'json/'
+if not os.path.exists(json_dir):
+    os.mkdir(json_dir)
 json.dump(tda_fdrs, open(result_dir+'json/tda_fdr.json', 'w'))
