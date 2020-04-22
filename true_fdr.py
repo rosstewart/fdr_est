@@ -28,17 +28,31 @@ import json
 
 
 species_list = [
-        'c_elegans',
-        'drosophila',
-        'e_coli',
-        'human',
-        'mouse',
-        'yeast',
+#        'c_elegans',
+#        'drosophila',
+#        'e_coli',
+#        'human',
+#        'mouse',
+#        'yeast',
+        'human_hcd',
+        'mouse_hcd',
     ]
+
+libmap = {
+        'c_elegans': 'c_elegans_consensus_final_true_lib.tar.gz',
+        'drosophila': 'drosophila_consensus_final_true_lib.tar.gz',
+        'e_coli': 'e_coli_consensus_final_true_lib.tar.gz',
+        'human': 'human_consensus_final_true_lib.tar.gz',
+        'mouse': 'mouse_consensus_final_true_lib.tar.gz',
+        'yeast': 'yeast_consensus_final_true_lib.tar.gz',
+        'human_hcd': 'human_hcd_selected.msp.tar.gz',
+        'mouse_hcd': 'cptac2_mouse_hcd_selected.msp.tar.gz',
+    }
 
 #%%
     
-res_dir = 'test_search/est_results_nist/'
+#res_dir = 'test_search/est_results_nist/'
+res_dir = 'test_search/est_results_nist_allinits/'
 
 data_dir = 'test_search/matdata_nist/'
 
@@ -48,7 +62,8 @@ def split_comments(comment):
     quote = False
     for c in comment:
         if c == ' ' and not quote:
-            yield ret
+            if '=' in ret:
+                yield ret
             ret = ''
         elif c == '"':
             quote = not quote
@@ -205,7 +220,9 @@ def get_truefdr(species):
     
     def get_peps(species):
         #mspfile = open('nist/human_consensus_final_true_lib.msp')
-        mspfile = tarfile.open('test_search/nist/'+species+'_consensus_final_true_lib.tar.gz', 'r|gz')
+#        mspfile = tarfile.open('test_search/nist/'+species+'_consensus_final_true_lib.tar.gz', 'r|gz')
+        mspfile = 'test_search/nist/'+libmap[species]
+        mspfile = tarfile.open(mspfile, 'r|gz')
         tarinfo = mspfile.next()
         mspfile = mspfile.extractfile(tarinfo)
         
@@ -231,8 +248,9 @@ def get_truefdr(species):
         f = open('test_search/nist/'+species+'_nod.tsv')
         psmcsv = csv.DictReader(f, delimiter='\t')
 
-        pepfound = pd.read_csv(species_dir+'matches.csv', names=['pepfound', 'protfound', 'protid'])
-        pepfound = pepfound['pepfound'].values
+        if skip_nomatch:
+            pepfound = pd.read_csv(species_dir+'matches.csv', names=['pepfound', 'protfound', 'protid'])
+            pepfound = pepfound['pepfound'].values
         
 #        psms = get_first_psms(psmcsv)
         psmlists = get_psm_lists(psmcsv)
