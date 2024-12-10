@@ -2,4 +2,4 @@
 
 Repo is forked from `https://github.com/shawn-peng/FDR-estimation`.
 
-I only edited files that show recent last updates.
+I only created/edited files that show recent last updates.
