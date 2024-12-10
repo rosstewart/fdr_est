@@ -35,19 +35,29 @@ import json
 
 
 species_list = [
-        'c_elegans',
-        'drosophila',
-        'e_coli',
-        'human',
-        'mouse',
-        'yeast',
+        'c_elegans_tda',
+        'h_sapiens_tda',
+        'm_musculus_tda',
+        's_cerevisiae_tda',
+#        'drosophila',
+#        'e_coli',
+#        'human',
+#        'mouse',
+#        'yeast',
     ]
 
 #%%
 
-data_dir = 'test_search/nist/'
+data_dir = 'data/nist/true_fdr_25ppm/'
+
+species_tar = {
+    species_list[0]: '2011_05_24_c_elegans_consensus_final_true_lib.tar.gz',
+    species_list[1]: '2014_05_29_human_consensus_final_true_lib.tar.gz',
+    species_list[2]: '2013_05_20_mouse_consensus_final_true_lib.tar.gz',
+    species_list[3]: '2012_04_06_yeast_consensus_final_true_lib.tar.gz',
+}
     
-res_dir = 'test_search/est_results_nist/'
+res_dir = 'data/nist/true_fdr_25ppm/'
 
 
 #%%
@@ -161,11 +171,11 @@ method_map = {
     }
 
 def get_truefdr(species):
-    species_dir = res_dir + species + '/'
+    species_dir = res_dir + species.replace("_tda","") + '/'
     
     def get_peps(species):
         #mspfile = open('nist/human_consensus_final_true_lib.msp')
-        mspfile = tarfile.open(data_dir+species+'_consensus_final_true_lib.tar.gz', 'r|gz')
+        mspfile = tarfile.open(data_dir+species_tar[species], 'r|gz')
         tarinfo = mspfile.next()
         mspfile = mspfile.extractfile(tarinfo)
         
@@ -181,12 +191,12 @@ def get_truefdr(species):
     peps = get_peps(species)
     
     def get_truefdr(species):
-        f = open(data_dir+species+'_d.tsv')
+        f = open('data/nist/tsv_result_tda/'+species+'_d.tsv')
         psmcsv = csv.DictReader(f, delimiter='\t')
-        
         psms = get_first_psms(psmcsv)
         matches = []
         for spec, pep, score in psms:
+            #print(species,spec,len(peps),data_dir+species_tar[species],'data/nist/tsv_result_tda/'+species+'_d.tsv')
         #    print(peps[spec], pep)
             matches.append((match_peptide(peps[spec], pep), score))
         #    print(match_peptide(peps[spec], pep))

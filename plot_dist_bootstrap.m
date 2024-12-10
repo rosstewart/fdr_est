@@ -64,6 +64,10 @@ legend({'dist\_correct'; 'dist\_incorrect'; 'mixture'; 'hist\_first'});
 % results_folder = 'test_search/fragger_results/';
 % results_folder = 'test_search/est_results/';
 
+%if ~exist('results_folder', 'var')
+results_folder = 'synthetic/fdr_result/';
+%end
+
 species_folder = [results_folder,species];
 distplot_dir = [species_folder,'/distplot/',method,'/bootstrap/'];
 fitcurv_dir = [species_folder,'/fitcurv/',method,'/bootstrap/'];

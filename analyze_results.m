@@ -8,12 +8,12 @@ clear
 %     };
 % clear
 
-list_species = {
-% 'A.thaliana'
+%list_species = {
+% 'a_thaliana'
 % % 'C.elegans'
 % 'D.melanogaster'
 % 'E.coli'
-'H.sapiens2'
+% 'H.sapiens2'
 % 'H.sapiens3'
 % 'M.musculus'
 % 'M.musculus2'
@@ -21,13 +21,13 @@ list_species = {
 % % 'S.cerevisiae'
 % 'S.cerevisiae2'
 % 'S.cerevisiae3'
-}
-data_dir = 'test_search/matdata_pride/';
+%}
+data_dir = 'synthetic/matdata/';
 
-results_folder = 'test_search/est_results_pride/';
+results_folder = 'synthetic/fdr_result/';
 xlim_high = 65;
 plotcdf = true;
-plotthres = false;
+plotthres = true;
 
 % list_species = {
 % 'HeLa01ng'
@@ -52,13 +52,44 @@ plotthres = false;
 
 
 % list_species = {
-% %     'c_elegans'
-% %     'drosophila'
-% %     'e_coli'
-% %     'human'
-% %     'mouse'
-%     'yeast'
+%     'c_elegans',
+%     'h_sapiens',
+%     'm_musculus',
+%     's_cerevisiae'
 % }
+
+list_species = {
+    'synthetic_1',
+    'synthetic_2',
+    'synthetic_3',
+    'synthetic_4',
+    'synthetic_5',
+    'synthetic_6',
+    'synthetic_7',
+    'synthetic_8',
+    'synthetic_9',
+    'synthetic_10',
+    'synthetic_11',
+    'synthetic_12',
+    'synthetic_13',
+    'synthetic_14',
+    'synthetic_15',
+    'synthetic_16',
+    'synthetic_17',
+    'synthetic_18',
+    'synthetic_19',
+    'synthetic_20',
+    'synthetic_21',
+    'synthetic_22',
+    'synthetic_23',
+    'synthetic_24',
+    'synthetic_25',
+    'synthetic_26',
+    'synthetic_27',
+    'synthetic_28',
+    'synthetic_29',
+    'synthetic_30'
+}
 % 
 % data_dir = 'test_search/matdata_nist/';
 % 
@@ -74,14 +105,17 @@ mix_color = [0.4940 0.1840 0.5560];
 
 cdfcolor = [0.6350 0.0780 0.1840];
 legending = false;
+
 legending2 = false;
 
 linewidth = 1;
 
 n = size(list_species, 1)
 for i = 1:n
+    % min_dcdf = 1;
     species = list_species{i};
 %     run parse_psm.m
-    load([data_dir,species,'_data.mat'])
+    load([data_dir,species,'_data' ...
+        '.mat'])
     run_all
 end

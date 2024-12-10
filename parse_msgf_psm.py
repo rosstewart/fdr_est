@@ -33,17 +33,18 @@ shantanu_m_l = ['SNMax1',]
 #
 #method_list += shantanu_m_l
 
-data_source = 'PRIDE'
+#data_source = 'PRIDE'
 #data_source = 'HeLa'
-#data_source = 'NIST'
+data_source = 'NIST'
+#data_source = 'Synthetic'
 
 if data_source == 'PRIDE':
     species_list = [
-#            'A.thaliana',
+            'a_thaliana',
 ##            'C.elegans',
 #            'D.melanogaster',
 #            'E.coli',
-            'H.sapiens2',
+#            'H.sapiens2',
 #            'H.sapiens3',
 #            'M.musculus',
 #            'M.musculus2',
@@ -52,10 +53,10 @@ if data_source == 'PRIDE':
 #            'S.cerevisiae2',
 #            'S.cerevisiae3',
         ]
-    result_dir = 'test_search/est_results/'
-    data_source = 'PRIDE'
-    psm_dir = 'test_search/pride/'
-    data_dir = 'test_search/matdata_pride/'
+    #result_dir = 'test_search/est_results/'
+    #data_source = 'PRIDE'
+    psm_dir = 'data/pride/a_thaliana/PXD001179_result/'
+    data_dir = 'data/pride/a_thaliana/PXD001179_mat/'
 
 elif data_source == 'HeLa':
     species_list = [
@@ -75,8 +76,8 @@ elif data_source == 'HeLa':
             'HeLa100ng.2',
             'HeLa100ng.3',
         ]
-    result_dir = 'test_search/est_results/'
-    data_source = ''
+    #result_dir = 'test_search/est_results/'
+    #data_source = ''
     psm_dir = 'test_search/hela/'
     data_dir = 'test_search/matdata_hela/'
 
@@ -88,13 +89,26 @@ elif data_source == 'NIST':
             #'human',
             #'mouse',
             #'yeast',
-            'human_hcd',
+            #'human_hcd',
             #'mouse_hcd',
+            'c_elegans_20ppm',
+            'h_sapiens_20ppm',
+            'm_musculus_20ppm',
+            's_cerevisiae_20ppm',
         ]
-    result_dir = 'test_search/est_results_nist/'
-    data_source = 'NIST'
-    psm_dir = 'test_search/nist/'
-    data_dir = 'test_search/matdata_nist/'
+    #result_dir = 'test_search/est_results_nist/'
+    #data_source = 'NIST'
+    psm_dir = 'data/nist/tsv_result/'
+    data_dir = 'data/nist/matdata/'
+
+elif data_source == 'Synthetic:
+     psm_dir = 'data/nist/tsv_result/'
+    data_dir = 'data/nist/matdata/''
+
+if not os.path.exists(psm_dir):
+    os.mkdir(psm_dir)
+if not os.path.exists(data_dir):
+    os.mkdir(data_dir)
 
 #%%
     
@@ -195,7 +209,7 @@ def extract_mat(species):
         i += 1
 
     print(species, i)
-    return
+#    return
 
     slen = np.array(slen)
     

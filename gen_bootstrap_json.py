@@ -59,8 +59,9 @@ species_list = [
 #species_list = [
 #        'E.coli',
 #    ]
+species_list = [f'synthetic_{i}' for i in [5,7,9,11,14,18,21,25,30]]#range(1,31)]
 
-results_dir = 'test_search/est_results_full/'
+results_dir = 'synthetic/fdr_result/'
 #results_dir = 'test_search/est_results_8inits/'
 #results_dir = 'test_search/est_results_part/'
 #results_dir = 'test_search/est_results_nist/'
@@ -80,6 +81,9 @@ def boxplot_thres(species, method):
         
         fdr_est = np.genfromtxt(fdr_file, delimiter=',')
         if len(fdr_est.shape) == 1:
+            #print('fdr_est',fdr_est,'thres_list',thres_list)
+            if len(thres_list) == 0:
+                continue
             thres_list.append(max(thres_list))
             continue
         

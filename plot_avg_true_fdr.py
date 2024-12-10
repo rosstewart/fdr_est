@@ -27,22 +27,39 @@ from collections import defaultdict
 #species = 'yeast'
 
 
-species_list = [
-        'c_elegans',
+#species_list = [
+#        'c_elegans',
 #        'drosophila',
 #        'e_coli',
-        'human',
-        'mouse',
-        'yeast',
-    ]
+#        'human',
+#        'mouse',
+#        'yeast',
+#    ]
 
 #%%
     
-res_dir = 'test_search/est_results_nist/'
+#res_dir = 'test_search/est_results_nist/'
+
+species_list = [
+        'c_elegans',
+        'h_sapiens',
+        'm_musculus',
+        's_cerevisiae',
+#        'drosophila',
+#        'e_coli',
+#        'human',
+#        'mouse',
+#        'yeast',
+    ]
 
 #%%
 
-tdajson = json.load(open(res_dir+'json/tda_fdr.json'))
+#res_dir = 'test_search/est_results_nist/'
+res_dir = 'data/nist/true_fdr_25ppm/'
+
+#%%
+
+tdajson = json.load(open('data/nist/fdr_result_tda/json/tda_fdr.json')) #json.load(open(res_dir+'json/tda_fdr.json'))
 tdajson = {res['ds']:res for res in tdajson}
 
 #%%
@@ -158,11 +175,11 @@ algo_name_map = {
 #log_scale = False
 log_scale = True
 
-skip_nomatch = True
-#skip_nomatch = False
+#skip_nomatch = True
+skip_nomatch = False
 
 if log_scale:
-    xgrid = np.power(10, np.arange(-5, 0, 0.01))
+    xgrid = np.power(10, np.arange(-5, 1, 0.001))
 else:
     xgrid = np.arange(0, 0.25, 0.001)
 
@@ -192,7 +209,7 @@ def get_fdrcurvs(species):
         estres = json.load(open(res_dir+'json/'+species+'.json'))
             
         max_fdr = max(true_fdr)
-        
+       ## 
 #        fig = plt.figure(figsize=[7,5], dpi=200)
 #        fig = plt.figure(figsize=[7,5])
 #        ax = plt.axes()
@@ -222,7 +239,7 @@ def get_fdrcurvs(species):
 #            ax.plot(est_fdr, true_fdr, linewidth=1)
 #            legends.append(res['algo'])
         
-        tdares = tdajson[species]
+        tdares = tdajson[species+'_tda']
         est_fdr = tdares['fdr']
         print(len(est_fdr))
         print(species, max(est_fdr))
@@ -251,13 +268,14 @@ def plot_avg_true_fdr():
         print(method)
         mat = np.array(mat)
         print(mat.shape)
+        mat = np.delete(mat, 1, axis=0)
         
         mcurv = mat.mean(0)
         curvstd = mat.std(0)
         
         ucurv = mcurv + curvstd
         dcurv = mcurv - curvstd
-    
+        
         mc = plt.plot(xgrid, mcurv)
         lines.append(mc[0])
         plt.plot(xgrid, ucurv, color=mc[0].get_c(), linewidth=1, alpha=.4)
@@ -266,12 +284,12 @@ def plot_avg_true_fdr():
         
         legends.append(algo_name_map[method])
     
-    mc = plt.plot([0,0.2], [0,0.2], linewidth=1, color='darkred',linestyle='dashed')
+    mc = plt.plot([0,0.25], [0,0.25], linewidth=1, color='darkred',linestyle='dashed')
 #    lines.append(mc[0])
 #    legends.append('ground truth')
     
-    ax.set_xlim(1e-3, 0.1)
-    ax.set_ylim(1e-3, 0.1)
+    ax.set_xlim(1e-3, 0.25)
+    ax.set_ylim(1e-3, 0.25)
     
     if log_scale:
         plt.xscale('log')
@@ -285,11 +303,11 @@ def plot_avg_true_fdr():
     plt.tight_layout()
     
     if log_scale:
-        plt.savefig('test_search/est_results_nist/fdrcmp_log.png', dpi=320)
-        plt.savefig('test_search/est_results_nist/fdrcmp_log.pdf', dpi=320)
+        plt.savefig('data/nist/true_fdr_25ppm/fdrcmp_log.png', dpi=320)
+        plt.savefig('data/nist/true_fdr_25ppm/fdrcmp_log.pdf', dpi=320)
     else:
-        plt.savefig('test_search/est_results_nist/fdrcmp.png', dpi=320)
-        plt.savefig('test_search/est_results_nist/fdrcmp.pdf', dpi=320)
+        plt.savefig('data/nist/true_fdr_25ppm/fdrcmp.png', dpi=320)
+        plt.savefig('data/nist/true_fdr_25ppm/fdrcmp.pdf', dpi=320)
 
 
 #%%

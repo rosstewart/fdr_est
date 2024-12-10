@@ -131,10 +131,10 @@ if plotcdf
             break
         end
     end
-%     if plotthres
-%         xline(s);
-%         text(s,0.4,'\leftarrow 1%fdr')
-%     end
+    % if plotthres
+    %     xline(s);
+    %     text(s,0.4,'\leftarrow 1%fdr')
+    % end
     sdcdf = calc_delta_cdf(S1, h1, h1emp);
     text(xlim_high-2, 0.8, ...
         sprintf('\\delta_{CDF} = %.2f', sdcdf), ...
@@ -180,6 +180,11 @@ end
 % end
 
 % saveas(gcf,[species_folder,'/distplot/',method,'.png'])
+% if (sdcdf < min_dcdf)
+%     min_dcdf = sdcdf;
+%     print([species_folder,'/distplot/',method,'.png'], '-dpng', '-r320'); 
+%     print([species_folder,'/distplot/',method,'.eps'], '-depsc', '-r320'); 
+% end
 print([species_folder,'/distplot/',method,'.png'], '-dpng', '-r320'); 
 print([species_folder,'/distplot/',method,'.eps'], '-depsc', '-r320'); 
 

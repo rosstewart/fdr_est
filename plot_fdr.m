@@ -15,8 +15,8 @@ for i = 1:n
     curv(i,:) = [fdr, sum(omat(:,1)>s), s];
 end
 
-figure();
-plot(curv(:,1), curv(:,2));
+% figure();
+% plot(curv(:,1), curv(:,2));
 
 % csvwrite('twomix.csv', curv);
 species_folder = [results_folder,species];

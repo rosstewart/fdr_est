@@ -18,16 +18,19 @@ import tarfile
 #species = 'yeast'
 
 species_list = [
-        'human_hcd',
-        'mouse_hcd',
-    ]
+        'c_elegans',
+        'h_sapiens',
+        'm_musculus',
+        's_cerevisiae',
+]
 
-libmap = {
-        'human_hcd': 'human_hcd_selected.msp.tar.gz',
-        'mouse_hcd': 'cptac2_mouse_hcd_selected.msp.tar.gz',
-    }
+#libmap = {
+#        'human_hcd': 'human_hcd_selected.msp.tar.gz',
+#        'mouse_hcd': 'cptac2_mouse_hcd_selected.msp.tar.gz',
+#    }
 
-data_dir = 'test_search/nist_hcd/'
+#data_dir = 'test_search/nist_hcd/'
+data_dir = 'data/nist/'
 
 #mspfile = open('nist/human_consensus_final_true_lib.msp')
 #mspfile = tarfile.open('nist/'+species+'_consensus_final_true_lib.tar.gz', 'r|gz')
@@ -101,16 +104,18 @@ def write_mgf(f, item):
     f.write('END IONS\n\n')
 
 for species in species_list:
-    mspfile = 'test_search/nist_hcd/'+libmap[species]
-    mspfile = tarfile.open(mspfile, 'r|gz')
-    tarinfo = mspfile.next()
-    mspfile = mspfile.extractfile(tarinfo)
-
-    msplist = (l.decode("utf-8").rstrip() for l in mspfile)
+    mspfile_str = f'{data_dir}{species}/{species}.msp'
+    #mspfile = tarfile.open(mspfile, 'r|gz')
+    #tarinfo = mspfile.next()
+    #mspfile = mspfile.extractfile(tarinfo)
+    
+    mspfile = open(mspfile_str, 'r')
+    msplist = (l.rstrip() for l in mspfile)
+    
     #for i in range(10):
     #    print(next(msplist))
 
-    mgffile = open(data_dir+species+'.mgf', 'w')
+    mgffile = open(f'{data_dir}{species}/{species}.mgf', 'w')
     n = 0
     for item in parse_msp(msplist):
         if not item:
@@ -119,6 +124,6 @@ for species in species_list:
         n += 1
         print(n)
 
-
+    mspfile.close()
     mgffile.close()    
 

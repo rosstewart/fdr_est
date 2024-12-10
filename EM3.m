@@ -24,13 +24,29 @@ S1_sorted = sort(s1, 'descend');
 S2_sorted = sort(s2, 'descend');
 % S_sorted = S;
 
-prior_thres = 20;
+%prior_thres = 20;
+prior_thres = 30;%30; % pepnovo
 nc1 = sum(S1_sorted > prior_thres);
 nc2 = sum(S2_sorted > prior_thres);
 % alpha = 0.1;
-alpha = nc1 / M1;
+alpha_constraint = 99999; %0.10;
+alpha = min(alpha_constraint,nc1 / M1);
+% alpha = nc1 / M1;
 % beta = 0.05;
-beta = nc2 / M2;
+% beta = nc2 / M2;
+beta_constraint = 99999; %0.04;
+beta = min(beta_constraint,nc2 / M2);
+
+index_start = int32(M1 * alpha);
+index_end = M1;
+
+if index_start < 1
+    error(['The start index must be a positive integer. M1: ', num2str(M1), ', alpha: ', num2str(alpha)]);
+end
+
+if index_start > M1
+    error('The start index cannot exceed the end index.');
+end
 
 [u_c, sigma_c, lambda_c] = sn_para_est(S1_sorted(1:int32(M1*alpha)));
 [u_i1, sigma_i1, lambda_i1] = sn_para_est(S1_sorted(int32(M1*alpha):M1));
@@ -52,7 +68,7 @@ lambda_i2 = (lambda_i2) * sl3;
 % lambda_i = 2;
 % alpha = 0.5;
 
-figure('Position', [10,10,2000,500]);
+% figure('Position', [10,10,2000,500]);
 while abs(ll - prev_ll) > tollerance
     prev_ll = ll;
 
@@ -66,8 +82,8 @@ while abs(ll - prev_ll) > tollerance
     disp(ll - prev_ll);
     disp([alpha, beta, u_c, sigma_c, lambda_c, u_i1, sigma_i1, lambda_i1, u_i2, sigma_i2, lambda_i2]);
         
-    plot_dist_fn(S, '_2s3ci', alpha, beta, u_c, sigma_c, lambda_c, u_i1, sigma_i1, lambda_i1, u_i2, sigma_i2, lambda_i2);
-    pause(.001);
+    % plot_dist_fn(S, '_2s3ci', alpha, beta, u_c, sigma_c, lambda_c, u_i1, sigma_i1, lambda_i1, u_i2, sigma_i2, lambda_i2);
+    % pause(.001);
 
     delta_i1 = lambda_i1 / sqrt(1+lambda_i1^2);
     Delta_i1 = sigma_i1 * delta_i1;
@@ -112,8 +128,13 @@ while abs(ll - prev_ll) > tollerance
     
 %     assert(sum_Rsc2 + sum_Rsi1 + sum_Rsi2 - M2 < 1e-4)
 
+    % alpha_new = (sum(Rsc1) + sum(Rsi1)) / (M1 + M2);
+    % PepNovo: Update alpha
     alpha_new = (sum(Rsc1) + sum(Rsi1)) / (M1 + M2);
+    % alpha_new = min(alpha_new, alpha_constraint); % Enforce prior knowledge constraint (PepNovo sucks)
+    % beta_new = sum(Rsc2) * (1 + (M1 - sum_Rsc1) / (M2 - sum_Rsi1)) / (M1 + M2);
     beta_new = sum(Rsc2) * (1 + (M1 - sum_Rsc1) / (M2 - sum_Rsi1)) / (M1 + M2);
+    % beta_new = min(beta_new, beta_constraint); % Enforce prior knowledge constraint (PepNovo sucks)
 
     u_i1_new = (sum( (1 - Rsc1) .* (s1 - Vi1 * Delta_i1) ) + sum( Rsi1 .* (s2 - Vi21 * Delta_i1))) / (M1 - sum_Rsc1 + sum_Rsi1);
     u_i2_new = (sum( (Rsi2) .* (s2 - Vi22 * Delta_i2) )) / (sum_Rsi2);

@@ -2,7 +2,11 @@ method='_1s2ca'
 [alpha, u_c, sigma_c, a_i, b_i, gamma_i] = EM2_1a(omat')
 plot_dist_gamma
 
-species_folder = [results_folder,species]
+if ~exist('results_folder', 'var')
+    results_folder = 'synthetic/fdr_result/';
+end
+species_folder = [results_folder,species] %[s,species]
+
 species_folder
 if ~exist('bootstrap_num')
     param_folder = [species_folder,'/params/'];

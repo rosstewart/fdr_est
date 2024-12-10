@@ -3,20 +3,25 @@ clear
 
 list_species = {
     'c_elegans'
-    'drosophila'
-    'e_coli'
-    'human'
-    'mouse'
+    'h_sapiens'
+    'm_musculus'
+    's_cerevisiae'
+%    'drosophila'
+%    'e_coli'
+%    'human'
+%    'mouse'
 }
 
-json_dir = 'test_search/est_results_nist/json/';
+%json_dir = 'test_search/est_results_nist/json/';
+json_dir = 'data/nist/true_fdr_25ppm/json/';
 if ~exist(json_dir)
     mkdir(json_dir)
 end
 
 % method = '_1s2c';
 
-results_folder = 'test_search/est_results_nist/';
+%results_folder = 'test_search/est_results_nist/';
+results_folder = 'data/nist/true_fdr_25ppm/';
 
 
 list_methods = {
@@ -34,8 +39,8 @@ results_arr = {};
 
 for sp_i = 1:n_sp
     species = list_species{sp_i}
-    load(['test_search/matdata/nist/',species,'_data.mat'])
-    species_folder = [results_folder,species];
+    load(['data/nist/matdata_25ppm/',species,'_data.mat'])
+    species_folder = ['data/nist/fdr_result_25ppm/',species];
     
     for me_j = 1:n_m
 %         run parse_psm.m
@@ -105,7 +110,7 @@ for sp_i = 1:n_sp
     end
     json = jsonencode(results_arr);
 %     json
-    fid = fopen(['test_search/est_results_nist/json/', species, '.json'],'wt');
+    fid = fopen(['data/nist/true_fdr_25ppm/json/', species, '.json'],'wt');
     fprintf(fid, json);
     fclose(fid);
     results_arr = {};

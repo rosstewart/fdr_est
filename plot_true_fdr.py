@@ -28,21 +28,25 @@ import json
 
 species_list = [
         'c_elegans',
-        'drosophila',
-        'e_coli',
-        'human',
-        'mouse',
-        'yeast',
+        'h_sapiens',
+        'm_musculus',
+        's_cerevisiae',
+#        'drosophila',
+#        'e_coli',
+#        'human',
+#        'mouse',
+#        'yeast',
     ]
 
 #%%
     
-res_dir = 'test_search/est_results_nist/'
+#res_dir = 'test_search/est_results_nist/'
+res_dir = 'data/nist/true_fdr_25ppm/'
 
 #%%
 
-tdajson = json.load(open(res_dir+'json/tda_fdr.json'))
-tdajson = {res['ds']:res for res in tdajson}
+#tdajson = json.load(open(res_dir+'json/tda_fdr.json'))
+#tdajson = {res['ds']:res for res in tdajson}
 
 #%%
 def split_comments(comment):
@@ -161,9 +165,9 @@ def plot_fdrcurv(species):
     
 
     fdr_dir = species_dir + 'fdr/'
-    truefdr_tda_file = fdr_dir + 'true_tda.csv'
-    true_fdr_tda = np.genfromtxt(truefdr_tda_file)
-    print(true_fdr_tda.shape)
+    #truefdr_tda_file = fdr_dir + 'true_tda.csv'
+    #true_fdr_tda = np.genfromtxt(truefdr_tda_file)
+    #print(true_fdr_tda.shape)
     
     fdr_correction_file = species_dir + 'fdr_correction.csv'
     fdr_correction = np.genfromtxt(fdr_correction_file)
@@ -173,6 +177,7 @@ def plot_fdrcurv(species):
     
     def draw_fdrcurv():
         estres = json.load(open(res_dir+'json/'+species+'.json'))
+        #estres = json.load(open('data/nist/matdata_25ppm/'+species+'_rep.json'))
             
         max_fdr = max(true_fdr)
         
@@ -206,11 +211,11 @@ def plot_fdrcurv(species):
 #            ax.plot(est_fdr, true_fdr, linewidth=1)
 #            legends.append(res['algo'])
         
-        tdares = tdajson[species]
-        est_fdr = tdares['fdr']
-        print(len(est_fdr))
+        #tdares = tdajson[species]
+        #est_fdr = tdares['fdr']
+        #print(len(est_fdr))
         
-        ax.plot(est_fdr, true_fdr_tda, linewidth=1)
+        #ax.plot(est_fdr, true_fdr_tda, linewidth=1)
         legends.append('tda')
         
         ax.plot([0,max_fdr], [0,max_fdr], linewidth=1, color='darkred',linestyle='dashed')
@@ -234,7 +239,7 @@ def plot_fdrcurv(species):
         #if not os.path.exists(curv_dir):
         #    os.mkdir(curv_dir)
         
-        fdrcurv_dir = species_dir + 'fdrcurv/'
+        fdrcurv_dir = 'data/nist/fdr_result_25ppm/' + species + '/fdrcurv/'
         
         if log_scale:
             plt.savefig(fdrcurv_dir + 'fdrcmp_log.png')

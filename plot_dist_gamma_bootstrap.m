@@ -34,6 +34,9 @@ histogram(s1,200,'Normalization','pdf');
 
 legend({'dist\_correct'; 'dist\_incorrect'; 'mixture'; 'hist\_first'});
 
+%if ~exist('results_folder', 'var')
+results_folder = 'synthetic/fdr_result/';
+%end
 species_folder = [results_folder,species];
 distplot_dir = [species_folder,'/distplot/',method,'/bootstrap/'];
 fitcurv_dir = [species_folder,'/fitcurv/',method,'/bootstrap/'];

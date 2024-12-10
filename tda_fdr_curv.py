@@ -15,8 +15,8 @@ import os
 #%%
 
 #data_source = 'PRIDE'
-data_source = 'HeLa'
-#data_source = 'NIST'
+#data_source = 'HeLa'
+data_source = 'NIST'
 
 if data_source == 'PRIDE':
     species_list = [
@@ -61,14 +61,18 @@ elif data_source == 'HeLa':
 
 elif data_source == 'NIST':
     species_list = [
-            'c_elegans',
-            'drosophila',
-            'e_coli',
-            'human',
-            'mouse',
-            'yeast',
+            'c_elegans_tda',
+            'h_sapiens_tda',
+            'm_musculus_tda',
+            's_cerevisiae_tda',
+#            'drosophila',
+#            'e_coli',
+#            'human',
+#            'mouse',
+#            'yeast',
         ]
-    result_dir = 'test_search/est_results_nist/'
+    psm_dir = 'data/nist/tsv_result_tda/'
+    result_dir = 'data/nist/fdr_result_tda/'
     data_source = 'NIST'
 
 method_list = [

@@ -7,6 +7,8 @@ yc = alpha*normpdf(s1, u_c, sigma_c);
 yi1 = (1-alpha)*gampdf(s1-gamma_i, a_i, 1/b_i);
 y1 = yc + yi1;
 
+% yc;
+
 % cdf
 
 h1emp = (1:m)' / m;
@@ -45,6 +47,7 @@ for i = 1:n
     if fdr <= 0.001
         flag10 = true;
     end
+    fdr;
     fdr_curv(i) = fdr;
 %     fdr_curv(i,:) = [fdr, sum(s1>s), s];
 end

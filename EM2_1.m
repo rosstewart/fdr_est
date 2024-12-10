@@ -12,11 +12,15 @@ S1_sorted = sort(S(1,:), 'descend');
 % S2_sorted = sort(S(2,:), 'descend');
 % S_sorted = S;
 
-prior_thres = 20;
+%prior_thres = 20;
+% prior_thres = 30; % pepnovo
+prior_thres = 30; % synthetic
 nc1 = sum(S1_sorted > prior_thres);
+% nc1 = sum(S1_sorted > prior_thres)/4; % pepnovo
 % nc2 = sum(S2_sorted > prior_thres);
 % alpha = 0.1;
-alpha = nc1 / M;
+alpha_constraint = 99999;
+alpha = min(alpha_constraint,nc1 / M);
 
 [u_c, sigma_c, lambda_c] = sn_para_est(S1_sorted(1:int32(M*alpha)));
 [u_i1, sigma_i1, lambda_i1] = sn_para_est(S1_sorted(int32(M*alpha):M));
@@ -51,7 +55,10 @@ while abs(ll - prev_ll) > tollerance
 
     Rs1 = rs(s1, alpha, u_i1, sigma_i1, lambda_i1, u_c, sigma_c, lambda_c);
     sum_Rs1 = sum(Rs1);
+    % alpha_new = 1 / M * sum(Rs1);
+    % PepNovo: Update alpha
     alpha_new = 1 / M * sum(Rs1);
+    % alpha_new = min(alpha_new, alpha_constraint); % Enforce prior knowledge constraint (PepNovo sucks)
 
     u_c_new = (sum( Rs1 .* (s1 - Vc1 * Delta_c))) / (sum_Rs1);
     u_i1_new = (sum( (1 - Rs1) .* (s1 - Vi1 * Delta_i1) )) / (M1 - sum_Rs1);

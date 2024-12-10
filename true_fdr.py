@@ -28,33 +28,34 @@ import json
 
 
 species_list = [
-#        'c_elegans',
+        'c_elegans',
 #        'drosophila',
 #        'e_coli',
 #        'human',
 #        'mouse',
-#        'yeast',
-        'human_hcd',
-        'mouse_hcd',
+        's_cerevisiae',#'yeast',
+        'h_sapiens',#'human_hcd',
+        'm_musculus',#'mouse_hcd',
     ]
 
 libmap = {
-        'c_elegans': 'c_elegans_consensus_final_true_lib.tar.gz',
+        'c_elegans': '2011_05_24_c_elegans_consensus_final_true_lib.tar.gz',#c_elegans_consensus_final_true_lib.tar.gz',
         'drosophila': 'drosophila_consensus_final_true_lib.tar.gz',
         'e_coli': 'e_coli_consensus_final_true_lib.tar.gz',
         'human': 'human_consensus_final_true_lib.tar.gz',
         'mouse': 'mouse_consensus_final_true_lib.tar.gz',
-        'yeast': 'yeast_consensus_final_true_lib.tar.gz',
-        'human_hcd': 'human_hcd_selected.msp.tar.gz',
-        'mouse_hcd': 'cptac2_mouse_hcd_selected.msp.tar.gz',
+        's_cerevisiae': '2012_04_06_yeast_consensus_final_true_lib.tar.gz',#yeast_consensus_final_true_lib.tar.gz',
+        'h_sapiens': '2014_05_29_human_consensus_final_true_lib.tar.gz',#human_hcd_selected.msp.tar.gz',
+        'm_musculus': '2013_05_20_mouse_consensus_final_true_lib.tar.gz',#cptac2_mouse_hcd_selected.msp.tar.gz',
+        #'m_musculus': 'cptac2_mouse_hcd_selected.msp.tar.gz',
     }
 
 #%%
     
 #res_dir = 'test_search/est_results_nist/'
-res_dir = 'test_search/est_results_nist_allinits/'
+res_dir = 'data/nist/true_fdr_25ppm/'
 
-data_dir = 'test_search/matdata_nist/'
+data_dir = 'data/nist/matdata_25ppm/'
 
 #%%
 def split_comments(comment):
@@ -221,7 +222,7 @@ def get_truefdr(species):
     def get_peps(species):
         #mspfile = open('nist/human_consensus_final_true_lib.msp')
 #        mspfile = tarfile.open('test_search/nist/'+species+'_consensus_final_true_lib.tar.gz', 'r|gz')
-        mspfile = 'test_search/nist/'+libmap[species]
+        mspfile = res_dir+libmap[species]
         mspfile = tarfile.open(mspfile, 'r|gz')
         tarinfo = mspfile.next()
         mspfile = mspfile.extractfile(tarinfo)
@@ -245,7 +246,7 @@ def get_truefdr(species):
     p_mis = []
     nomatch = []
     def get_truefdr(species):
-        f = open('test_search/nist/'+species+'_nod.tsv')
+        f = open('data/nist/tsv_result_25ppm/'+species+'_nod.tsv')
         psmcsv = csv.DictReader(f, delimiter='\t')
 
         if skip_nomatch:

@@ -2,7 +2,7 @@ function bootstraping_fn(species, bootstart, nboots, boot_ratio)
 % bootstart = 181;
 % nboots = 20;
 % boot_ratio = .1;
-bootind_dir = 'test_search/est_results/bootstrap_index/';
+bootind_dir = 'synthetic/fdr_result/bootstrap_index/'%'pepnovo/nist/fdr_result_7-16/bootstrap_index/';
 if ~exist(bootind_dir)
 	mkdir(bootind_dir)
 end

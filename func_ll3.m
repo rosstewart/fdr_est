@@ -3,6 +3,10 @@ function ll = func_ll3(S1, S2, alpha, beta, u_c, sigma_c, lambda_c, u_i1, sigma_
 
     
     P_c1 = skew_norm_pdf(S1, u_c, sigma_c, lambda_c);
+    S1;
+    u_c;
+    sigma_c;
+    lambda_c;
     P_i1 = skew_norm_pdf(S1, u_i1, sigma_i1, lambda_i1);
     P_c2 = skew_norm_pdf(S2, u_c, sigma_c, lambda_c);
     P_i21 = skew_norm_pdf(S2, u_i1, sigma_i1, lambda_i1);
@@ -14,4 +18,15 @@ function ll = func_ll3(S1, S2, alpha, beta, u_c, sigma_c, lambda_c, u_i1, sigma_
     p1(p1==0) = min(p1(p1~=0));
     p2(p2==0) = min(p2(p2~=0));
     ll = mean(log(p1)) + mean(log(p2));
+
+
+    % PepNovo:
+    % Add a penalty if alpha exceeds 0.10 or beta exceeds 0.04
+    % penalty = 0;
+    % if alpha > 0.10 || beta > 0.04
+    %     penalty = -inf; 
+    % end
+
+    % Total log-likelihood with penalty
+    % ll = ll + penalty;
 end

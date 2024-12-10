@@ -9,4 +9,14 @@ function ll = func_ll2_1(S1, alpha, u_c, sigma_c, lambda_c, u_i1, sigma_i1, lamb
     
     p1(p1==0) = min(p1(p1~=0));
     ll = mean(log(p1));
+
+    % PepNovo:
+    % Add a penalty if alpha exceeds 0.05
+    % penalty = 0;
+    % if alpha > 0.10
+    %     penalty = -inf; 
+    % end
+
+    % Total log-likelihood with penalty
+    % ll = ll + penalty;
 end

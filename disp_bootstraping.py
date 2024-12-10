@@ -41,6 +41,7 @@ species_list = [
         'S.cerevisiae2',
         'S.cerevisiae3',
     ]
+species_list = [f'synthetic_{i}' for i in range(1,31)]
 
 #species_list = [
 #        'HeLa01ng',
@@ -55,8 +56,9 @@ species_list = [
 #    ]
 
 #results_dir = 'test_search/est_results_8inits/'
-results_dir = 'test_search/est_results_full/'
+#results_dir = 'test_search/est_results_full/'
 #results_dir = 'test_search/est_results_part/'
+results_dir = 'synthetic/est_results_full/'
 
 #%%
 
@@ -97,16 +99,16 @@ print('')
 #%%
 bootstrap_dir = results_dir + '/json/bootstrap/'
 
-tda_thres = json.load(open(bootstrap_dir+'tda.json'))
-tda_thres = {obj['ds']:obj['t1p'] for obj in tda_thres}
+#tda_thres = json.load(open(bootstrap_dir+'tda.json'))
+#tda_thres = {obj['ds']:obj['t1p'] for obj in tda_thres}
 
 def boxplot_species(species):
     thres_1 = json.load(open(bootstrap_dir+species+'.json'))
     thres_1 = np.array([obj['t1p'] for obj in thres_1])
     print(thres_1.shape)
-    thres_2 = np.array(tda_thres[species])
+   # thres_2 = np.array(tda_thres[species])
     
-    thres_mat = np.vstack([thres_2, thres_1]).T
+    thres_mat = np.vstack([thres_1]).T
     ticks = ['TDA', 'GG', '1SMix', '2SMix']
     
     fig = plt.figure(figsize=[4,3])
